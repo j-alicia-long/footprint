@@ -3,6 +3,10 @@
   --color-bg: #f4f9f4;
   /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
   --color-text: #1e3a2b;
+  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
+  --color-card-bg: #fff;
+  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
+  --color-muted: #5c7d69;
 }
 
 body {
@@ -16,4 +20,22 @@ body {
   margin: 0 auto;
   max-width: 40rem;
   padding: 2rem 1rem;
+}
+
+.scenario-card {
+  background: var(--color-card-bg);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.scenario-card-central {
+  display: block;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+
+.scenario-card-band {
+  color: var(--color-muted);
+  display: block;
+  font-size: 0.875rem;
 }

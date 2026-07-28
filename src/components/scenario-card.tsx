@@ -1,0 +1,22 @@
+import { computeFootprint } from "../footprint/compute-footprint";
+import type { Scenario } from "../footprint/scenarios";
+
+const formatWh = (value: number) => `${value.toFixed(1)} Wh`;
+
+/** Thin rendering layer over computeFootprint — no math in components. */
+export const ScenarioCard = ({ scenario }: { scenario: Scenario }) => {
+  const { energyWh } = computeFootprint(scenario);
+  return (
+    <article className="scenario-card">
+      <h2 className="scenario-card-title">{scenario.title}</h2>
+      <p className="scenario-card-energy">
+        <strong className="scenario-card-central">
+          {formatWh(energyWh.central)}
+        </strong>
+        <span className="scenario-card-band">
+          {`${energyWh.min.toFixed(1)} – ${energyWh.max.toFixed(1)} Wh`}
+        </span>
+      </p>
+    </article>
+  );
+};

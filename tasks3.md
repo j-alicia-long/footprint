@@ -12,13 +12,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done — except deployment, deferred: site will be deployed manually on Zo
 
-- [ ] `npm run dev` serves a placeholder page; production build succeeds
-- [ ] ESLint, Stylelint, and typecheck all pass using the web-config presets
-- [ ] Pre-commit hook runs Prettier + ESLint on staged files, then typecheck and test
-- [ ] `web-conventions` skill committed under `.github/skills/` with a working `sync-skills` script
-- [ ] Placeholder page is deployed and reachable at a public URL with no backend
+- [x] `npm run dev` serves a placeholder page; production build succeeds
+- [x] ESLint, Stylelint, and typecheck all pass using the web-config presets
+- [x] Pre-commit hook runs Prettier + ESLint on staged files, then typecheck and test
+- [x] `web-conventions` skill committed under `.github/skills/` with a working `sync-skills` script
+- [ ] Placeholder page is deployed and reachable at a public URL with no backend _(paused — deploying on Zo manually)_
 
 ---
 
@@ -28,13 +28,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 01 — Scaffold deployable static site.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] The card renders the Scenario's bold central Energy (Wh) with min–max band beneath
-- [ ] Golden-value test: a 500-token frontier Scenario's energy is same-order as, and above, Epoch AI's ~0.3 Wh GPU-only figure (per the deliberate full-stack boundary)
-- [ ] Invariant test: min ≤ central ≤ max; Energy scales monotonically with output tokens
-- [ ] Every Coefficient record carries a citation; the Scenario Recipe is data, not code
-- [ ] All math tests attach at the `computeFootprint` seam — no tests of internal helpers
+- [x] The card renders the Scenario's bold central Energy (Wh) with min–max band beneath
+- [x] Golden-value test: a 500-token frontier Scenario's energy is same-order as, and above, Epoch AI's ~0.3 Wh GPU-only figure (per the deliberate full-stack boundary)
+- [x] Invariant test: min ≤ central ≤ max; Energy scales monotonically with output tokens
+- [x] Every Coefficient record carries a citation; the Scenario Recipe is data, not code
+- [x] All math tests attach at the `computeFootprint` seam — no tests of internal helpers
 
 ---
 
