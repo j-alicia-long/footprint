@@ -4,6 +4,20 @@ How the page turns a Scenario into displayed numbers. Everything here is
 implemented in `src/footprint/` and validated by tests at the
 `computeFootprint` seam (`src/footprint/compute-footprint.test.ts`).
 
+## Architecture decisions
+
+- [ADR 0001 — Full-stack, location-based boundary](adr/0001-full-stack-location-based-boundary.md):
+  every number uses one fixed measurement boundary (GPU + server + PUE +
+  embodied, physical grid mix). Boundary choice alone swings published
+  figures ~95×, so it is never mixed across Scenarios; market-based carbon
+  and GPU-only accounting are rejected.
+- [ADR 0002 — Replicate EcoLogits' methodology in TypeScript](adr/0002-replicate-ecologits-methodology-in-typescript.md):
+  EcoLogits is a Python library that instruments live LLM calls, not a
+  callable API — and our Scenarios are hypothetical presets on a static
+  site. We port its ~40-line formula chain so estimates are instant and
+  offline and every constant stays in the cited Coefficient Set; drift risk
+  is pinned by golden-value tests against external anchors.
+
 ## Boundary
 
 Full-stack, **location-based** accounting per
@@ -35,7 +49,9 @@ computeFootprint(scenario: Scenario, coefficients?: CoefficientSet): Footprint
 
 ## Energy model (EcoLogits methodology)
 
-We replicate EcoLogits' bottom-up model (`ecologits/impacts/llm.py`),
+We replicate EcoLogits' bottom-up model (`ecologits/impacts/llm.py`; see
+[ADR 0002](adr/0002-replicate-ecologits-methodology-in-typescript.md) for
+why we port rather than call it),
 calibrated on ML.ENERGY's measured H100 benchmark data. For a Scenario with
 `T` output tokens on a Model Class with `A` billion _active_ parameters and
 `P` billion total parameters:
