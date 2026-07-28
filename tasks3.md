@@ -12,13 +12,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** None — can start immediately.
 
-**Status:** done — except deployment, deferred: site will be deployed manually on Zo
+**Status:** done
 
 - [x] `npm run dev` serves a placeholder page; production build succeeds
 - [x] ESLint, Stylelint, and typecheck all pass using the web-config presets
 - [x] Pre-commit hook runs Prettier + ESLint on staged files, then typecheck and test
 - [x] `web-conventions` skill committed under `.github/skills/` with a working `sync-skills` script
-- [ ] Placeholder page is deployed and reachable at a public URL with no backend _(paused — deploying on Zo manually)_
+- [x] Placeholder page is deployed and reachable at a public URL with no backend — https://footprint-jlong.zocomputer.io via `scripts/deploy-zo.sh` (builds `dist/` and syncs it to the Zo site over the Zo MCP API)
 
 ---
 

@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-In progress — scaffold and first tracer Scenario built (tickets 01–02 of [`tasks3.md`](tasks3.md)): one card shows Energy (Wh) with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Deployment (on Zo) pending.
+In progress — scaffold and first tracer Scenario built (tickets 01–02 of [`tasks3.md`](tasks3.md)): one card shows Energy (Wh) with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Live at **https://footprint-jlong.zocomputer.io**.
 
 ## Development
 
@@ -19,6 +19,7 @@ npm run lint:styles # Stylelint (web-config preset)
 npm run typecheck
 npm run build       # static production build in dist/
 npm run sync-skills # re-copy web-conventions skill into .github/skills/
+./scripts/deploy-zo.sh # build + deploy to https://footprint-jlong.zocomputer.io (needs mcporter + Zo token)
 ```
 
 Pre-commit (husky + lint-staged) runs Prettier + ESLint on staged files, then typecheck and tests.
