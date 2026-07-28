@@ -39,3 +39,15 @@ body {
   display: block;
   font-size: 0.875rem;
 }
+
+.scenario-card-equivalents {
+  color: var(--color-muted);
+  font-size: 0.875rem;
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+}
+
+.scenario-card-equivalent {
+  margin-top: 0.25rem;
+}

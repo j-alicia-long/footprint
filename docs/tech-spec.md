@@ -43,7 +43,8 @@ computeFootprint(scenario: Scenario, coefficients?: CoefficientSet): Footprint
   carbon linearity in grid intensity) can be tested at the seam without
   reaching into internals.
 - `Footprint` returns `energyWh` and `carbonG`, each an Uncertainty Band
-  `{ min, central, max }`.
+  `{ min, central, max }`, plus `equivalents` — the Scenario translated
+  into familiar actions (see Equivalents below).
 - The React UI is a thin rendering layer over this function; components do
   no math (enforced by testing only at the seam).
 
@@ -115,6 +116,22 @@ Embodied-hardware constants (H100: 273 kgCO₂e; 8-GPU server: 5,700 kgCO₂e,
 **not yet folded into carbonG** — at realistic latencies they add well under
 1 g per request and no ticket has required them yet.
 
+## Equivalents
+
+`computeFootprint` also returns `equivalents`: familiar actions with the
+same Footprint, so the UI stays a thin rendering layer (ticket 04). Each
+Equivalent is `{ id, label, basis, unit, amount }`, where `basis` names the
+Footprint metric it converts from and `amount` is an Uncertainty Band
+scaled from that metric's band by a published conversion Coefficient:
+
+| Equivalent    | Basis  | Conversion                                                                | Coefficient (citation)                                  |
+| ------------- | ------ | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `tv-watching` | Energy | `min of TV = Wh × 60 / tvPower` (100 W → 0.6 min/Wh)                      | `tvPower` (U.S. DOE appliance energy)                   |
+| `car-driving` | Carbon | `m driven = gCO₂e × 1609.344 / carDrivingCarbon` (400 g/mile → ~4.02 m/g) | `carDrivingCarbon` (U.S. EPA typical passenger vehicle) |
+
+The meters-per-mile factor is an exact definitional unit conversion and
+lives in code, not the Coefficient Set.
+
 ## Coefficient Set
 
 Every constant lives in `src/footprint/coefficients.ts` as a record
@@ -152,6 +169,7 @@ At the seam only — no tests of internal helpers:
 - Energy scales monotonically with output tokens
 - Carbon scales linearly with grid intensity (via injected Coefficient
   Set); Energy is unaffected by grid intensity
+- Every Equivalent's band brackets its central value
 - Every Coefficient and Model Class carries a citation
 
 ## Deployment

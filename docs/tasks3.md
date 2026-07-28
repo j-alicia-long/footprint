@@ -59,12 +59,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 03 — Carbon derived from Energy.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Card renders at least two Equivalents (one Energy-based, one Carbon-based)
-- [ ] Equivalents come out of `computeFootprint`, not computed in components
-- [ ] Each conversion Coefficient carries its citation
-- [ ] Behavior test at the seam: a given Scenario returns the expected Equivalent values
+- [x] Card renders at least two Equivalents (one Energy-based, one Carbon-based)
+- [x] Equivalents come out of `computeFootprint`, not computed in components
+- [x] Each conversion Coefficient carries its citation
+- [x] Behavior test at the seam: a given Scenario returns the expected Equivalent values
 
 ---
 

@@ -36,3 +36,18 @@ test("card shows Carbon (gCO₂e) central number with min–max band, alongside 
     ),
   ).toBeInTheDocument();
 });
+
+test("card renders the Scenario's Equivalents (Energy-based TV and Carbon-based driving) from computeFootprint", () => {
+  render(<ScenarioCard scenario={scenario} />);
+  const { equivalents } = computeFootprint(scenario);
+  expect(equivalents.length).toBeGreaterThanOrEqual(2);
+
+  // e.g. "0.8 min of watching TV" and "2.5 m of driving a car"
+  for (const equivalent of equivalents) {
+    expect(
+      screen.getByText(
+        `${equivalent.amount.central.toFixed(1)} ${equivalent.unit} of ${equivalent.label}`,
+      ),
+    ).toBeInTheDocument();
+  }
+});

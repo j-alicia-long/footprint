@@ -5,7 +5,7 @@ const formatWh = (value: number) => `${value.toFixed(1)} Wh`;
 
 /** Thin rendering layer over computeFootprint — no math in components. */
 export const ScenarioCard = ({ scenario }: { scenario: Scenario }) => {
-  const { energyWh, carbonG } = computeFootprint(scenario);
+  const { energyWh, carbonG, equivalents } = computeFootprint(scenario);
   return (
     <article className="scenario-card">
       <h2 className="scenario-card-title">{scenario.title}</h2>
@@ -25,6 +25,13 @@ export const ScenarioCard = ({ scenario }: { scenario: Scenario }) => {
           {`${carbonG.min.toFixed(1)} – ${carbonG.max.toFixed(1)} gCO₂e`}
         </span>
       </p>
+      <ul className="scenario-card-equivalents">
+        {equivalents.map((equivalent) => (
+          <li key={equivalent.id} className="scenario-card-equivalent">
+            {`${equivalent.amount.central.toFixed(1)} ${equivalent.unit} of ${equivalent.label}`}
+          </li>
+        ))}
+      </ul>
     </article>
   );
 };

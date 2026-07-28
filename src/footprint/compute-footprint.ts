@@ -6,15 +6,28 @@ import { modelClasses, type Scenario } from "./scenarios";
 
 type CoefficientSet = Record<keyof typeof bundledCoefficients, Coefficient>;
 
+// Exact definitional unit conversion, not a published Coefficient
+const METERS_PER_MILE = 1609.344;
+
 export type UncertaintyBand = {
   min: number;
   central: number;
   max: number;
 };
 
+export type Equivalent = {
+  id: string;
+  label: string;
+  /** Which Footprint metric the conversion Coefficient applies to. */
+  basis: "energy" | "carbon";
+  unit: string;
+  amount: UncertaintyBand;
+};
+
 export type Footprint = {
   energyWh: UncertaintyBand;
   carbonG: UncertaintyBand;
+  equivalents: Equivalent[];
 };
 
 /**
@@ -72,12 +85,41 @@ export const computeFootprint = (
   // Carbon = Energy × location-based grid intensity (kgCO2e/kWh ≡ gCO2e/Wh);
   // min/central/max propagate through unchanged.
   const gWh = c.gridIntensity.value;
-  return {
-    energyWh,
-    carbonG: {
-      min: energyWh.min * gWh,
-      central: energyWh.central * gWh,
-      max: energyWh.max * gWh,
-    },
+  const carbonG = {
+    min: energyWh.min * gWh,
+    central: energyWh.central * gWh,
+    max: energyWh.max * gWh,
   };
+
+  const scaleBand = (
+    band: UncertaintyBand,
+    factor: number,
+  ): UncertaintyBand => ({
+    min: band.min * factor,
+    central: band.central * factor,
+    max: band.max * factor,
+  });
+
+  // Equivalents: familiar actions with the same Footprint, each converted
+  // via a published Coefficient (ticket 04).
+  const minutesPerWh = 60 / c.tvPower.value;
+  const metersPerG = METERS_PER_MILE / c.carDrivingCarbon.value;
+  const equivalents: Equivalent[] = [
+    {
+      id: "tv-watching",
+      label: "watching TV",
+      basis: "energy",
+      unit: "min",
+      amount: scaleBand(energyWh, minutesPerWh),
+    },
+    {
+      id: "car-driving",
+      label: "driving a car",
+      basis: "carbon",
+      unit: "m",
+      amount: scaleBand(carbonG, metersPerG),
+    },
+  ];
+
+  return { energyWh, carbonG, equivalents };
 };
