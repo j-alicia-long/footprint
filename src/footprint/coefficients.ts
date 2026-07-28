@@ -142,6 +142,19 @@ export const coefficients = {
       url: "https://ecologits.ai/latest/methodology/llm_inference/",
     },
   },
+  gridIntensity: {
+    id: "grid-intensity",
+    description:
+      "World-average location-based grid carbon intensity (SCI/ISO 21031; market-based accounting rejected per ADR 0001)",
+    value: 0.458,
+    unit: "kgCO2e/kWh",
+    citation: {
+      source:
+        "EcoLogits electricity_mixes.json WOR (Our World in Data / Ember)",
+      year: 2024,
+      url: "https://ecologits.ai/latest/methodology/llm_inference/",
+    },
+  },
   hardwareLifespan: {
     id: "hardware-lifespan",
     description:

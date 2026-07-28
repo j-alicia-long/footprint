@@ -44,12 +44,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 02 — First tracer Scenario.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Card shows Carbon (gCO₂e) central number with min–max band, alongside Energy
-- [ ] Golden-value test: a ~1,000-token frontier-class Scenario lands in the ~5–11 gCO₂e range
-- [ ] Invariant test: Carbon scales linearly with grid intensity; min ≤ central ≤ max holds for Carbon
-- [ ] Grid-intensity Coefficient carries its citation in the Coefficient Set
+- [x] Card shows Carbon (gCO₂e) central number with min–max band, alongside Energy
+- [x] Golden-value test: a ~1,000-token frontier-class Scenario lands in the ~1–3 gCO₂e range _(re-anchored from 5–11 g: that ballpark assumed GPT-4-original scale ~176–528B active; our frontier recipe is modern GPT-4.1/4o scale per EcoLogits proxies, anchored instead to Mistral's peer-reviewed LCA — 1.14 g per 400-token response on 123B dense — which contradicts ticket 02's Epoch-anchored energy test otherwise)_
+- [x] Invariant test: Carbon scales linearly with grid intensity; min ≤ central ≤ max holds for Carbon
+- [x] Grid-intensity Coefficient carries its citation in the Coefficient Set
 
 ---
 

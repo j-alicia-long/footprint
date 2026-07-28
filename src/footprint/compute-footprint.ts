@@ -1,5 +1,10 @@
-import { coefficients } from "./coefficients";
+import {
+  coefficients as bundledCoefficients,
+  type Coefficient,
+} from "./coefficients";
 import { modelClasses, type Scenario } from "./scenarios";
+
+type CoefficientSet = Record<keyof typeof bundledCoefficients, Coefficient>;
 
 export type UncertaintyBand = {
   min: number;
@@ -9,6 +14,7 @@ export type UncertaintyBand = {
 
 export type Footprint = {
   energyWh: UncertaintyBand;
+  carbonG: UncertaintyBand;
 };
 
 /**
@@ -18,7 +24,10 @@ export type Footprint = {
  * The Uncertainty Band comes from the Model Class's active-parameter
  * range (unknown MoE activation, 10-30%).
  */
-export const computeFootprint = (scenario: Scenario): Footprint => {
+export const computeFootprint = (
+  scenario: Scenario,
+  coefficients: CoefficientSet = bundledCoefficients,
+): Footprint => {
   const spec = modelClasses[scenario.modelClass];
   const c = coefficients;
   const batch = c.batchSize.value;
@@ -54,11 +63,21 @@ export const computeFootprint = (scenario: Scenario): Footprint => {
   };
 
   const { min, max } = spec.activeParamsB;
+  const energyWh = {
+    min: energyAt(min),
+    central: energyAt((min + max) / 2),
+    max: energyAt(max),
+  };
+
+  // Carbon = Energy × location-based grid intensity (kgCO2e/kWh ≡ gCO2e/Wh);
+  // min/central/max propagate through unchanged.
+  const gWh = c.gridIntensity.value;
   return {
-    energyWh: {
-      min: energyAt(min),
-      central: energyAt((min + max) / 2),
-      max: energyAt(max),
+    energyWh,
+    carbonG: {
+      min: energyWh.min * gWh,
+      central: energyWh.central * gWh,
+      max: energyWh.max * gWh,
     },
   };
 };

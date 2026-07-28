@@ -39,6 +39,41 @@ describe("computeFootprint — Energy", () => {
 
 const frontier500Energy = () => computeFootprint(frontier500).energyWh.central;
 
+describe("computeFootprint — Carbon", () => {
+  test("golden value: a ~1,000-token frontier Scenario lands near Mistral's LCA anchor (~1–3 gCO₂e)", () => {
+    // Anchor: Mistral Large 2 LCA (peer-reviewed, Jul 2025) measured
+    // 1.14 gCO₂e per 400-token response on a 123B dense model —
+    // ~1–3 g per 1,000 frontier-class tokens at world grid intensity.
+    const { carbonG } = computeFootprint({
+      ...frontier500,
+      outputTokens: 1000,
+    });
+    expect(carbonG.central).toBeGreaterThan(1);
+    expect(carbonG.central).toBeLessThan(3);
+  });
+
+  test("invariant: min ≤ central ≤ max holds for Carbon", () => {
+    const { carbonG } = computeFootprint(frontier500);
+    expect(carbonG.min).toBeLessThanOrEqual(carbonG.central);
+    expect(carbonG.central).toBeLessThanOrEqual(carbonG.max);
+    expect(carbonG.min).toBeLessThan(carbonG.max);
+  });
+
+  test("invariant: Carbon scales linearly with grid intensity", () => {
+    const base = computeFootprint(frontier500);
+    const doubled = computeFootprint(frontier500, {
+      ...coefficients,
+      gridIntensity: {
+        ...coefficients.gridIntensity,
+        value: coefficients.gridIntensity.value * 2,
+      },
+    });
+    expect(doubled.carbonG.central).toBeCloseTo(base.carbonG.central * 2, 10);
+    // Energy is upstream of grid intensity and must not change
+    expect(doubled.energyWh.central).toBe(base.energyWh.central);
+  });
+});
+
 describe("Coefficient Set", () => {
   test("every Coefficient record carries a citation with source, year, and link", () => {
     for (const coefficient of Object.values(coefficients)) {

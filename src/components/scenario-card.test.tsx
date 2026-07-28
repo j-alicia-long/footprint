@@ -22,3 +22,17 @@ test("card shows the Scenario's bold central Energy (Wh) with min–max Uncertai
     ),
   ).toBeInTheDocument();
 });
+
+test("card shows Carbon (gCO₂e) central number with min–max band, alongside Energy", () => {
+  render(<ScenarioCard scenario={scenario} />);
+  const { carbonG } = computeFootprint(scenario);
+
+  expect(
+    screen.getByText(`${carbonG.central.toFixed(1)} gCO₂e`),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(
+      `${carbonG.min.toFixed(1)} – ${carbonG.max.toFixed(1)} gCO₂e`,
+    ),
+  ).toBeInTheDocument();
+});
