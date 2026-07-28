@@ -1,6 +1,6 @@
 # Research: Measuring the Carbon Footprint of Session-Based AI Usage
 
-*Compiled 2026-07-27. Wide survey of primary sources (peer-reviewed papers, first-party provider disclosures, open measurement tools) on estimating the energy, carbon, and water footprint of API-based LLM usage — with an eye toward adding per-session carbon estimates to this tracker.*
+_Compiled 2026-07-27. Wide survey of primary sources (peer-reviewed papers, first-party provider disclosures, open measurement tools) on estimating the energy, carbon, and water footprint of API-based LLM usage — with an eye toward adding per-session carbon estimates to this tracker._
 
 ---
 
@@ -20,21 +20,22 @@ SCI = (O + M) per R
 ```
 
 Key points:
-- **Energy (E):** what the servers drew to serve your tokens. You can't meter a provider's datacenter, so you estimate from *output tokens × energy-per-token*, calibrated on measured benchmarks of open models of similar size. LLM decoding is **memory-bandwidth-bound**, so GPUs run well below rated power (~25% of TDP in the BLOOM study) — naive TDP math overestimates.
+
+- **Energy (E):** what the servers drew to serve your tokens. You can't meter a provider's datacenter, so you estimate from _output tokens × energy-per-token_, calibrated on measured benchmarks of open models of similar size. LLM decoding is **memory-bandwidth-bound**, so GPUs run well below rated power (~25% of TDP in the BLOOM study) — naive TDP math overestimates.
 - **PUE (Power Usage Effectiveness):** datacenter overhead multiplier (cooling, power conversion). Hyperscalers ≈ 1.09–1.20; industry average ≈ 1.58 (Patterson 2022).
 - **Grid carbon intensity:** gCO₂e/kWh where the datacenter sits. US ≈ 384–386, world ≈ 458–475, France ≈ 82.
 - **Embodied emissions:** manufacturing carbon of hardware, amortized over ~3-year life (~273 kgCO₂e per H100). Typically 20–35% of lifecycle totals (BLOOM: 22%; LLMCarbon: 24–35%; Google 2025: 33%).
-- SCI mandates **location-based** intensity — renewable energy credits/offsets do *not* reduce an SCI score; only efficiency does.
+- SCI mandates **location-based** intensity — renewable energy credits/offsets do _not_ reduce an SCI score; only efficiency does.
 
 ## 2. Energy vs. carbon vs. water — three distinct metrics
 
-Energy is the *physical input*; carbon and water are *consequences* of producing/using that energy.
+Energy is the _physical input_; carbon and water are _consequences_ of producing/using that energy.
 
-| Metric | Unit | Derivation | Key property |
-|---|---|---|---|
-| **Energy** | Wh/query | Estimated directly from tokens | Objective, location-independent; the fundamental unit |
-| **Carbon** | gCO₂e/query | energy × grid intensity (+ embodied) | Location- and accounting-dependent (France vs. US ≈ 5×; market- vs. location-based ≈ 3.7×) |
-| **Water** | mL/query | energy × WUE (+ scope-2 + manufacturing) | Most boundary-sensitive (170× spread across published figures); locally meaningful (water stress is regional, CO₂ is global) |
+| Metric     | Unit        | Derivation                               | Key property                                                                                                                 |
+| ---------- | ----------- | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Energy** | Wh/query    | Estimated directly from tokens           | Objective, location-independent; the fundamental unit                                                                        |
+| **Carbon** | gCO₂e/query | energy × grid intensity (+ embodied)     | Location- and accounting-dependent (France vs. US ≈ 5×; market- vs. location-based ≈ 3.7×)                                   |
+| **Water**  | mL/query    | energy × WUE (+ scope-2 + manufacturing) | Most boundary-sensitive (170× spread across published figures); locally meaningful (water stress is regional, CO₂ is global) |
 
 ```mermaid
 graph LR
@@ -51,17 +52,18 @@ Water has two channels: **on-site cooling** (evaporative cooling, ~1.15 L/kWh co
 
 ## 3. Primary sources: per-query numbers
 
-| Source | Model / setup | Energy/query | Carbon/query | Scope | Method |
-|--------|-------|-------------|-------------|-------|--------|
-| de Vries, *Joule* 2023 | GPT-3.5, A100 | **~3 Wh** | ~1.3 gCO₂e | GPU max TDP only | Estimated (SemiAnalysis model) |
-| Luccioni et al. 2022 (BLOOM) | BLOOM-176B, 16×A100 | **~4 Wh** | ~1.5 gCO₂e | GPU+CPU+RAM, no PUE | Measured, unbatched |
-| Samsi et al., IEEE HPEC 2023 | LLaMA-65B, A100 | **~0.3 Wh** | — | GPU only | Measured, unbatched |
-| Epoch AI, Feb 2025 | GPT-4o (~100B active), H100 | **~0.3 Wh** (500 tokens) | — | GPU+server+utilization+PUE | FLOPs-based estimate, open spreadsheet |
-| Sam Altman blog, Jun 2025 | ChatGPT (unspecified) | **0.34 Wh** (+0.32 mL water) | — | **Unknown — no methodology disclosed** | Self-disclosed |
-| Google, Aug 2025 (arXiv:2508.15734) | Gemini Apps, TPU, May 2025 | **0.24 Wh** | **0.03 gCO₂e**, 0.26 mL water | Full stack: accelerator+CPU+DRAM+idle+PUE, market-based, Scope 1+2+3 | Measured production fleet |
-| Mistral LCA, Jul 2025 | Mistral Large 2, 400-token response | — | **1.14 gCO₂e**, 45 mL water | Full ISO LCA: embodied + operational, location-based | Peer-reviewed LCA (with ADEME/Carbone 4) |
+| Source                              | Model / setup                       | Energy/query                 | Carbon/query                  | Scope                                                                | Method                                   |
+| ----------------------------------- | ----------------------------------- | ---------------------------- | ----------------------------- | -------------------------------------------------------------------- | ---------------------------------------- |
+| de Vries, _Joule_ 2023              | GPT-3.5, A100                       | **~3 Wh**                    | ~1.3 gCO₂e                    | GPU max TDP only                                                     | Estimated (SemiAnalysis model)           |
+| Luccioni et al. 2022 (BLOOM)        | BLOOM-176B, 16×A100                 | **~4 Wh**                    | ~1.5 gCO₂e                    | GPU+CPU+RAM, no PUE                                                  | Measured, unbatched                      |
+| Samsi et al., IEEE HPEC 2023        | LLaMA-65B, A100                     | **~0.3 Wh**                  | —                             | GPU only                                                             | Measured, unbatched                      |
+| Epoch AI, Feb 2025                  | GPT-4o (~100B active), H100         | **~0.3 Wh** (500 tokens)     | —                             | GPU+server+utilization+PUE                                           | FLOPs-based estimate, open spreadsheet   |
+| Sam Altman blog, Jun 2025           | ChatGPT (unspecified)               | **0.34 Wh** (+0.32 mL water) | —                             | **Unknown — no methodology disclosed**                               | Self-disclosed                           |
+| Google, Aug 2025 (arXiv:2508.15734) | Gemini Apps, TPU, May 2025          | **0.24 Wh**                  | **0.03 gCO₂e**, 0.26 mL water | Full stack: accelerator+CPU+DRAM+idle+PUE, market-based, Scope 1+2+3 | Measured production fleet                |
+| Mistral LCA, Jul 2025               | Mistral Large 2, 400-token response | —                            | **1.14 gCO₂e**, 45 mL water   | Full ISO LCA: embodied + operational, location-based                 | Peer-reviewed LCA (with ADEME/Carbone 4) |
 
 Per-token translations:
+
 - Epoch AI / Samsi: ~0.3 Wh per 500 tokens → **~0.0006 Wh/token**
 - Mistral LCA: **0.00285 gCO₂e/token** (full lifecycle)
 - Google Gemini: ~0.00003 gCO₂e/token (~95× lower than Mistral — boundary choice + clean-energy procurement, not measurement error)
@@ -76,7 +78,7 @@ Per-token translations:
 
 **Wu et al. (Meta) — "Sustainable AI: Environmental Implications, Challenges and Opportunities" (MLSys 2022).** arXiv:2111.00364. Meta infrastructure capacity: 70% inference / 20% training / 10% experimentation. For their translation LM: inference = 65% of energy. Embodied carbon ≈ 50% of location-based operational carbon; at ~97% renewables, embodied dominates (80–95% of total). PUE ≈ 1.10.
 
-**de Vries — "The growing energy footprint of artificial intelligence" (*Joule* 7(10), Oct 2023).** DOI 10.1016/j.joule.2023.09.004. The famous **~3 Wh/query** figure (range 2–10 Wh), from a SemiAnalysis model: GPT-3.5 dense 175B, A100 at 800 W peak, 2,000 output tokens assumed. Now considered ~10× too high for modern serving: ~4× from token-count assumption (real chats average 261–500 output tokens), ~2× hardware (A100→H100), rest from MoE and utilization accounting. Still useful as a historical upper bound.
+**de Vries — "The growing energy footprint of artificial intelligence" (_Joule_ 7(10), Oct 2023).** DOI 10.1016/j.joule.2023.09.004. The famous **~3 Wh/query** figure (range 2–10 Wh), from a SemiAnalysis model: GPT-3.5 dense 175B, A100 at 800 W peak, 2,000 output tokens assumed. Now considered ~10× too high for modern serving: ~4× from token-count assumption (real chats average 261–500 output tokens), ~2× hardware (A100→H100), rest from MoE and utilization accounting. Still useful as a historical upper bound.
 
 **Epoch AI — "How much energy does ChatGPT use?" (Gradient Updates, Feb 2025).** epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use. Central estimate **~0.3 Wh per GPT-4o query** (500 output tokens). Derivation: ~100B active params (MoE) × 2 FLOPs/param/token × 500 tokens = 1e14 FLOP; H100 at 989 TFLOP/s peak, **10% utilization** (inferred from open-model API pricing), ~1,500 W/GPU including server+DC overhead, 70% average power fraction → ≈ 0.3 Wh. Long contexts are the exception: 10k-token input ≈ 2.4 Wh, 100k ≈ 40 Wh (one-time per conversation thanks to KV cache). Reasoning models likely 2–3× higher. Fully open assumptions spreadsheet.
 
@@ -90,7 +92,7 @@ Per-token translations:
 
 **Samsi et al. — "From Words to Watts: Benchmarking the Energy Costs of Large Language Model Inference" (IEEE HPEC 2023).** DOI 10.1109/HPEC58863.2023.10363447; arXiv:2310.03003. MIT Lincoln Lab. Measured LLaMA 7B/13B/65B on V100/A100: **LLaMA-65B ≈ 0.3 Wh/response**; per-token energy ~linear in parameter count. Unbatched, GPU-only.
 
-**Chung, Chowdhury et al. (U. Michigan) — Zeus (NSDI 2023) and "The ML.ENERGY Benchmark" (NeurIPS 2025 D&B, Spotlight).** arXiv:2505.06371; ml.energy/leaderboard. **The best open dataset of measured Wh/output-token** — dozens of open LLMs on H100s under production-style vLLM batching. Follow-up "Where Do the Joules Go?" (arXiv:2601.22076): decode is memory-bound (power well below TDP; diffusion models by contrast run at ~TDP); task type alone can cause 25× energy differences; INT8 isn't always cheaper; more GPUs can *reduce* total energy via KV-cache headroom.
+**Chung, Chowdhury et al. (U. Michigan) — Zeus (NSDI 2023) and "The ML.ENERGY Benchmark" (NeurIPS 2025 D&B, Spotlight).** arXiv:2505.06371; ml.energy/leaderboard. **The best open dataset of measured Wh/output-token** — dozens of open LLMs on H100s under production-style vLLM batching. Follow-up "Where Do the Joules Go?" (arXiv:2601.22076): decode is memory-bound (power well below TDP; diffusion models by contrast run at ~TDP); task type alone can cause 25× energy differences; INT8 isn't always cheaper; more GPUs can _reduce_ total energy via KV-cache headroom.
 
 **Li, Yang, Islam & Ren — "Making AI Less 'Thirsty'" (2023).** arXiv:2304.03271. Water accounting framework: scope-1 (on-site evaporative cooling, ~1.0–1.2 L/kWh) + scope-2 (power generation, ~3–4 L/kWh US consumption). GPT-3.5 ≈ 10–50 mL per medium response. Projects 4.2–6.6 billion m³ global AI water withdrawal by 2027.
 
@@ -106,6 +108,7 @@ Per-token translations:
 ## 5. Practical tools for token-based estimation (closed models)
 
 ### EcoLogits — the purpose-built tool ⭐
+
 - **Repo:** `mlco2/ecologits` · docs: ecologits.ai · MPL-2.0 (code), CC BY-SA 4.0 (methodology) · Zenodo DOI 10.5281/zenodo.15601289 · actively maintained (CodeCarbon nonprofit).
 - **Inputs:** provider + model name + **output token count** + request latency; optional grid zone (ISO alpha-3). Exactly what this tracker's Derived Store already has.
 - **Method:** bottom-up LCA. GPU energy per output token from a regression **fitted on ML.ENERGY's measured H100 data**: `E_gpu(Wh/token) = α·e^(β·B)·P_active + γ` with α=1.17e-6, β=−0.0112, γ=4.05e-5, default batch B=64. Adds server non-GPU power (1.2 kW/8-GPU node), GPU count from model memory footprint, PUE, grid intensity, and embodied hardware amortized over 3 years (H100: 273 kgCO₂e; server: 5,700 kgCO₂e via BoaviztAPI).
@@ -114,9 +117,10 @@ Per-token translations:
 - Standalone post-hoc use (no SDK patching): replicate `llm_impacts(provider, model, output_tokens, latency, zone)` from `ecologits/impacts/llm.py` + the provider PUE table (`tracers/utils.py`) + `data/electricity_mixes.json`.
 
 ### Other tools surveyed
+
 - **CodeCarbon** (`mlco2/codecarbon`, MIT): measures **local** CPU/GPU/RAM via RAPL/NVML × grid intensity. Cannot see remote API servers — its README explicitly points to EcoLogits for that. Relevant only for local inference (Ollama etc.). World fallback: 475 gCO₂e/kWh (IEA 2019).
 - **ML CO2 Impact calculator** (Lacoste et al. 2019, arXiv:1910.09700; mlco2.github.io/impact): the canonical `hours × TDP × PUE × grid` formula; designed for training runs; passively maintained. The building block everything else extends.
-- **Green Algorithms** (Lannelongue et al., *Advanced Science* 2021, DOI 10.1002/advs.202100707; green-algorithms.org): general HPC compute calculator (cores × TDP × memory × PUE × intensity); no token/LLM modeling.
+- **Green Algorithms** (Lannelongue et al., _Advanced Science_ 2021, DOI 10.1002/advs.202100707; green-algorithms.org): general HPC compute calculator (cores × TDP × memory × PUE × intensity); no token/LLM modeling.
 - **Zeus / ML.ENERGY** (Apache-2.0): GPU energy measurement library + the leaderboard dataset EcoLogits is calibrated on. Needs direct GPU access.
 - **Cloud provider tools:** AWS Customer Carbon Footprint Tool, Google Cloud Carbon Footprint (per-region gCO₂e/kWh CSVs at `GoogleCloudPlatform/region-carbon-info` — useful lookup), Azure Carbon Optimization. All monthly/aggregate; none give per-request granularity.
 - **Grid intensity data (free):** EPA eGRID (US, annual, by subregion; 2022 US avg ≈ 386 gCO₂e/kWh), Ember / Our World in Data (annual per-country, CC BY 4.0), Electricity Maps (real-time, paid API), WattTime (marginal emissions, registration). Simplest: vendor EcoLogits' `electricity_mixes.json` (200+ countries, USA = 0.3844, WOR = 0.45829 kgCO₂e/kWh).
@@ -124,23 +128,23 @@ Per-token translations:
 
 ### Key default coefficients
 
-| Coefficient | Value | Source |
-|---|---|---|
-| World avg grid intensity | 0.458 kgCO₂e/kWh | EcoLogits WOR (Our World in Data / Ember) |
-| USA grid intensity | 0.384 kgCO₂e/kWh | EcoLogits USA; eGRID 2022 ≈ 0.386 |
-| OpenAI PUE | 1.20 | EcoLogits (Azure DCs) |
-| Anthropic PUE | 1.09–1.14 | EcoLogits (AWS/GCP mix) |
-| Industry avg PUE | 1.58 | Uptime Institute via Patterson 2022 |
-| GPU energy α / β / γ | 1.17e-6 Wh/tok/Bparam / −0.0112 / 4.05e-5 Wh/tok | EcoLogits fit on ML.ENERGY H100 data |
-| H100 embodied carbon | 273 kgCO₂e | ADEME (Lees-Perasso et al.) |
-| 8-GPU server embodied | 5,700 kgCO₂e | BoaviztAPI |
-| Hardware lifetime | 3 years | EcoLogits |
-| Google WUE | 1.15 L/kWh consumed | Google 2025 paper |
+| Coefficient              | Value                                            | Source                                    |
+| ------------------------ | ------------------------------------------------ | ----------------------------------------- |
+| World avg grid intensity | 0.458 kgCO₂e/kWh                                 | EcoLogits WOR (Our World in Data / Ember) |
+| USA grid intensity       | 0.384 kgCO₂e/kWh                                 | EcoLogits USA; eGRID 2022 ≈ 0.386         |
+| OpenAI PUE               | 1.20                                             | EcoLogits (Azure DCs)                     |
+| Anthropic PUE            | 1.09–1.14                                        | EcoLogits (AWS/GCP mix)                   |
+| Industry avg PUE         | 1.58                                             | Uptime Institute via Patterson 2022       |
+| GPU energy α / β / γ     | 1.17e-6 Wh/tok/Bparam / −0.0112 / 4.05e-5 Wh/tok | EcoLogits fit on ML.ENERGY H100 data      |
+| H100 embodied carbon     | 273 kgCO₂e                                       | ADEME (Lees-Perasso et al.)               |
+| 8-GPU server embodied    | 5,700 kgCO₂e                                     | BoaviztAPI                                |
+| Hardware lifetime        | 3 years                                          | EcoLogits                                 |
+| Google WUE               | 1.15 L/kWh consumed                              | Google 2025 paper                         |
 
 ## 6. Application to this tracker
 
 - The Derived Store already holds per-session **model + output tokens** — the exact inputs EcoLogits needs. Adding `gCO2e_min/mean/max` (and optionally `energy_wh`, `water_ml`) per session is a small extension: three regression constants + two JSON lookup tables, or `pip install ecologits` used offline.
-- **Ballpark:** a coding session emitting ~1,000 output tokens on a GPT-4-class model ≈ **5–11 gCO₂e** (≈ 25–50 m of car driving). Sessions on Haiku/mini-class models are ~10–30× lower.
+- **Ballpark:** a coding session emitting ~1,000 output tokens on a GPT-4-class model ≈ **5–11 gCO₂e** (≈ 25–50 m of car driving). Sessions on Haiku/mini-class models are ~10–30× lower. ⚠️ **Corrected by implementation (2026-07-28):** this range assumed GPT-4-_original_ scale (1.76T MoE, 176–528B active, ~64 GPUs). Running the full EcoLogits math with modern frontier proxies (GPT-4.1 ≈ 352B / 35–106B active) gives ≈ **1–3 gCO₂e per 1,000 frontier tokens** — consistent with both Epoch AI's ~0.3 Wh GPU-only energy figure (full-stack ≈ 2.6 Wh/1,000 tokens) and Mistral's peer-reviewed LCA (1.14 g per 400-token response, 123B dense). The two anchors are mutually consistent only at modern scale: 5 g at 0.458 g/Wh needs ≥10 Wh/1,000 tokens, which no recipe near Epoch's estimate can produce. See `docs/tech-spec.md` (golden-value anchors) in ai-carbon-footprint.
 - **Report ranges, not points** — closed-model parameter counts are guesses. Mirrors the existing "API-Equivalent Value ≠ Actual Spend" discipline: pick one boundary (recommend: EcoLogits full-stack, location-based) and never mix boundaries across rows.
 - Agentic/reasoning sessions generate far more output tokens than chat medians — token-based estimation captures this automatically (a point in favor of this approach over per-"query" constants).
 - Honest caveats to surface in any dashboard view: parameter-count uncertainty; prefill/input-token energy secondary but nonzero (quadratic for very long contexts — 100k-token context ≈ 40 Wh one-time per Epoch); training amortization excluded (as in nearly all published per-query figures).
@@ -154,7 +158,7 @@ Per-token translations:
 5. Patterson et al. "Carbon Emissions and Large Neural Network Training." 2021. arXiv:2104.10350
 6. Patterson et al. "The Carbon Footprint of Machine Learning Training Will Plateau, Then Shrink." IEEE Computer, 2022. arXiv:2204.05149
 7. Wu et al. "Sustainable AI: Environmental Implications, Challenges and Opportunities." MLSys 2022. arXiv:2111.00364
-8. de Vries. "The growing energy footprint of artificial intelligence." *Joule* 7(10), 2023. DOI 10.1016/j.joule.2023.09.004
+8. de Vries. "The growing energy footprint of artificial intelligence." _Joule_ 7(10), 2023. DOI 10.1016/j.joule.2023.09.004
 9. Epoch AI. "How much energy does ChatGPT use?" Gradient Updates, Feb 2025. https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use
 10. Altman, S. "The Gentle Singularity." Jun 2025. https://blog.samaltman.com/the-gentle-singularity
 11. Mistral AI (with Carbone 4, ADEME). "Our contribution to a global environmental standard for AI." Jul 2025. https://mistral.ai/news/our-contribution-to-a-global-environmental-standard-for-ai
@@ -165,7 +169,7 @@ Per-token translations:
 16. Chung et al. "The ML.ENERGY Benchmark: Toward Automated Inference Energy Measurement and Optimization." NeurIPS 2025 D&B (Spotlight). arXiv:2505.06371. https://ml.energy/leaderboard
 17. Chung et al. "Where Do the Joules Go? Diagnosing Inference Energy Consumption." 2026. arXiv:2601.22076
 18. Li, Yang, Islam & Ren. "Making AI Less 'Thirsty': Uncovering and Addressing the Secret Water Footprint of AI Models." 2023. arXiv:2304.03271
-19. Lannelongue, Grealey & Inouye. "Green Algorithms: Quantifying the Carbon Footprint of Computation." *Advanced Science*, 2021. DOI 10.1002/advs.202100707
+19. Lannelongue, Grealey & Inouye. "Green Algorithms: Quantifying the Carbon Footprint of Computation." _Advanced Science_, 2021. DOI 10.1002/advs.202100707
 20. EcoLogits (GenAI Impact / CodeCarbon nonprofit). https://ecologits.ai · https://github.com/mlco2/ecologits · Zenodo DOI 10.5281/zenodo.15601289
 21. CodeCarbon. https://github.com/mlco2/codecarbon · https://docs.codecarbon.io
 22. EPA eGRID. https://www.epa.gov/egrid · Ember. https://ember-energy.org/data/ · Electricity Maps. https://app.electricitymaps.com · WattTime. https://docs.watttime.org

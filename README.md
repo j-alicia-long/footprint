@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-In progress — scaffold and first tracer Scenario built (tickets 01–02 of [`tasks3.md`](tasks3.md)): one card shows Energy (Wh) with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Live at **https://footprint-jlong.zocomputer.io**.
+In progress — tickets 01–03 of [`docs/tasks3.md`](docs/tasks3.md) done: one card shows Energy (Wh) and Carbon (gCO₂e), each with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Live at **https://footprint-jlong.zocomputer.io**.
 
 ## Development
 
@@ -35,5 +35,6 @@ Pre-commit (husky + lint-staged) runs Prettier + ESLint on staged files, then ty
 ## Docs
 
 - [`CONTEXT.md`](CONTEXT.md) — domain glossary (Scenario, Footprint, Equivalent, Coefficient Set…)
+- [`docs/tech-spec.md`](docs/tech-spec.md) — how the Footprint math works: formula chain, Coefficient Set, Uncertainty Bands, golden-value anchors, deployment
 - [`docs/adr/`](docs/adr/) — architecture decision records
-- [`research.md`](research.md) — the underlying research: primary sources on LLM energy/carbon/water measurement, per-query figures, tools (EcoLogits, ML.ENERGY), and default coefficients with citations
+- [`docs/research.md`](docs/research.md) — the underlying research: primary sources on LLM energy/carbon/water measurement, per-query figures, tools (EcoLogits, ML.ENERGY), and default coefficients with citations
