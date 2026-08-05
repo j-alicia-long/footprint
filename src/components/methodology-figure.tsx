@@ -31,8 +31,8 @@ export const MethodologyFigure = ({
   return (
     <span
       className="methodology-figure"
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onPointerEnter={(e) => e.pointerType === "mouse" && setHovered(true)}
+      onPointerLeave={(e) => e.pointerType === "mouse" && setHovered(false)}
     >
       <button
         type="button"

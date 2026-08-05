@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-In progress — tickets 01–03 of [`docs/tasks3.md`](docs/tasks3.md) done: one card shows Energy (Wh) and Carbon (gCO₂e), each with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Live at **https://footprint-jlong.zocomputer.io**.
+v1 complete — all tickets in [`docs/tasks3.md`](docs/tasks3.md) done: five preset Scenarios across three Model Classes with instant card switching, Energy + Carbon with Uncertainty Bands, Equivalents, Methodology Notes on every figure (hover, keyboard, and touch), the "why our numbers are higher" explainer, and the green nature theme. Live at **https://footprint-jlong.zocomputer.io**.
 
 ## Development
 

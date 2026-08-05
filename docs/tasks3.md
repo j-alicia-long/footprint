@@ -74,12 +74,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 03 — Carbon derived from Energy; 04 — Equivalents on the card.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Every displayed figure reveals a Methodology Note on hover
-- [ ] Notes are reachable via keyboard focus and touch tap (accessibility story #15)
-- [ ] Notes render from the same Coefficient records used by `computeFootprint`
-- [ ] Invariant test: every displayed figure carries a Methodology Note reference
+- [x] Every displayed figure reveals a Methodology Note on hover
+- [x] Notes are reachable via keyboard focus and touch tap (accessibility story #15)
+- [x] Notes render from the same Coefficient records used by `computeFootprint`
+- [x] Invariant test: every displayed figure carries a Methodology Note reference
 
 ---
 
@@ -89,13 +89,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 02 — First tracer Scenario.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Scenario cards span light → heavy activities across all three Model Classes
-- [ ] Clicking a card updates the displayed Footprint immediately
-- [ ] Invariant test: smaller Model Classes never exceed larger ones on the same Recipe
-- [ ] UI smoke test: clicking a Scenario card renders that Scenario's computed central numbers
-- [ ] Adding a new Scenario is a data-only change
+- [x] Scenario cards span light → heavy activities across all three Model Classes
+- [x] Clicking a card updates the displayed Footprint immediately
+- [x] Invariant test: smaller Model Classes never exceed larger ones on the same Recipe
+- [x] UI smoke test: clicking a Scenario card renders that Scenario's computed central numbers
+- [x] Adding a new Scenario is a data-only change
 
 ---
 
@@ -105,12 +105,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 05 — Methodology Notes on every figure.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Panel explains the full-stack, location-based boundary and names the ~5–30× gap explicitly
-- [ ] References ADR 0001 and cites the compared provider figures
-- [ ] States that training-phase emissions are excluded (as industry-wide per-query figures do)
-- [ ] Reachable by keyboard and touch, consistent with Methodology Note interaction
+- [x] Panel explains the full-stack, location-based boundary and names the ~5–30× gap explicitly
+- [x] References ADR 0001 and cites the compared provider figures
+- [x] States that training-phase emissions are excluded (as industry-wide per-query figures do)
+- [x] Reachable by keyboard and touch, consistent with Methodology Note interaction
 
 ---
 
@@ -120,9 +120,9 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 05 — Methodology Notes on every figure; 06 — Full Scenario set.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Green nature-themed design applied across the page
-- [ ] Layout readable and fully usable on a phone-sized viewport
-- [ ] Bold central numbers with small Uncertainty Bands beneath, per README design
-- [ ] Stylelint passes; no CSS Modules or Tailwind introduced
+- [x] Green nature-themed design applied across the page
+- [x] Layout readable and fully usable on a phone-sized viewport
+- [x] Bold central numbers with small Uncertainty Bands beneath, per README design
+- [x] Stylelint passes; no CSS Modules or Tailwind introduced

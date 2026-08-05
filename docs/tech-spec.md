@@ -44,7 +44,12 @@ computeFootprint(scenario: Scenario, coefficients?: CoefficientSet): Footprint
   reaching into internals.
 - `Footprint` returns `energyWh` and `carbonG`, each an Uncertainty Band
   `{ min, central, max }`, plus `equivalents` — the Scenario translated
-  into familiar actions (see Equivalents below).
+  into familiar actions (see Equivalents below) — and a `MethodologyNote`
+  per figure (`energyNote`, `carbonNote`, one per Equivalent): the shared
+  boundary statement plus the exact Coefficient records that figure's math
+  used, so a number and its citation can never drift apart (asserted by
+  object identity at the seam). The UI reveals notes on hover, keyboard
+  focus, and touch tap — never hover-only (ticket 05).
 - The React UI is a thin rendering layer over this function; components do
   no math (enforced by testing only at the seam).
 
@@ -171,6 +176,9 @@ At the seam only — no tests of internal helpers:
   Set); Energy is unaffected by grid intensity
 - Every Equivalent's band brackets its central value
 - Every Coefficient and Model Class carries a citation
+- Every displayed figure carries a Methodology Note built from the same
+  Coefficient records the math used
+- Smaller Model Classes never exceed larger ones on the same Recipe
 
 ## Deployment
 

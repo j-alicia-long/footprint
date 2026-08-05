@@ -1,55 +1,66 @@
 :root {
-  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
-  --color-bg: #f4f9f4;
-  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
-  --color-text: #1e3a2b;
-  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
-  --color-card-bg: #fff;
-  /* stylelint-disable-next-line color-no-hex -- token definitions are the one place raw colors live */
-  --color-muted: #5c7d69;
+  /* stylelint-disable color-no-hex -- token definitions are the one place raw colors live */
+  --color-bg: #eef3e7;
+  --color-bg-glow: #dcebd2;
+  --color-card-bg: #fbfdf4;
+  --color-card-edge: #d7e3c9;
+  --color-text: #1c3527;
+  --color-heading: #16301f;
+  --color-muted: #5d7a63;
+  --color-leaf: #3e7a4e;
+  --color-leaf-deep: #2c5c3a;
+  --color-note-bg: #16301f;
+  --color-note-text: #e9f2e0;
+  --shadow-tint-faint: #1c352714;
+  --shadow-tint-soft: #1c35270f;
+  --shadow-tint-card: #1c35272e;
+  --shadow-tint-note: #16301f73;
+  /* stylelint-enable color-no-hex */
+  --font-display: "Fraunces", "Iowan Old Style", georgia, serif;
+  --font-body: "Karla", "Avenir Next", "Segoe UI", sans-serif;
 }
 
 body {
-  background: var(--color-bg);
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(
+      42rem 30rem at 85% -5%,
+      var(--color-bg-glow) 0%,
+      transparent 70%
+    ),
+    radial-gradient(
+      36rem 26rem at -10% 40%,
+      var(--color-bg-glow) 0%,
+      transparent 70%
+    );
   color: var(--color-text);
-  font-family: system-ui, sans-serif;
+  font-family: var(--font-body);
+  line-height: 1.55;
   margin: 0;
+  min-height: 100vh;
 }
 
 .app {
   margin: 0 auto;
-  max-width: 40rem;
-  padding: 2rem 1rem;
+  max-width: 42rem;
+  padding: 2.5rem 1.25rem 4rem;
 }
 
-.scenario-card {
-  background: var(--color-card-bg);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-}
-
-.scenario-card-central {
-  display: block;
+.app > h1 {
+  color: var(--color-heading);
+  font-family: var(--font-display);
   font-size: 2.25rem;
-  font-weight: 700;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
 }
 
-.scenario-card-band {
+.app > p {
   color: var(--color-muted);
-  display: block;
-  font-size: 0.875rem;
-}
-
-.scenario-card-equivalents {
-  color: var(--color-muted);
-  font-size: 0.875rem;
-  list-style: none;
-  margin: 1rem 0 0;
-  padding: 0;
-}
-
-.scenario-card-equivalent {
-  margin-top: 0.25rem;
+  font-size: 1.063rem;
+  margin: 0 0 2rem;
+  max-width: 32rem;
 }
 
 .scenario-picker {
@@ -61,18 +72,95 @@ body {
 
 .scenario-picker-button {
   background: var(--color-card-bg);
-  border: 1px solid var(--color-muted);
+  border: 1px solid var(--color-card-edge);
   border-radius: 999px;
+  box-shadow: 0 1px 2px var(--shadow-tint-faint);
   color: var(--color-text);
   cursor: pointer;
+  font-family: var(--font-body);
   font-size: 0.875rem;
+  font-weight: 500;
   padding: 0.5rem 1rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.scenario-picker-button:hover {
+  border-color: var(--color-leaf);
+  transform: translateY(-1px);
+}
+
+.scenario-picker-button:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
 }
 
 .scenario-picker-button[aria-pressed="true"] {
-  background: var(--color-text);
-  border-color: var(--color-text);
-  color: var(--color-bg);
+  background: var(--color-leaf-deep);
+  border-color: var(--color-leaf-deep);
+  color: var(--color-note-text);
+}
+
+.scenario-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-edge);
+  border-radius: 1.25rem;
+  box-shadow:
+    0 1px 2px var(--shadow-tint-soft),
+    0 12px 32px -12px var(--shadow-tint-card);
+  padding: 1.75rem 1.5rem;
+}
+
+.scenario-card-title {
+  color: var(--color-heading);
+  font-family: var(--font-display);
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.25rem;
+}
+
+.scenario-card-energy,
+.scenario-card-carbon {
+  margin: 0 0 1.25rem;
+}
+
+.scenario-card-central {
+  color: var(--color-leaf-deep);
+  display: block;
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-variant-numeric: lining-nums;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.scenario-card-band {
+  color: var(--color-muted);
+  display: block;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.scenario-card-equivalents {
+  border-top: 1px dashed var(--color-card-edge);
+  color: var(--color-muted);
+  font-size: 0.9375rem; /* stylelint-disable-line number-max-precision -- 15px on the rem scale */
+  list-style: none;
+  margin: 1.25rem 0 0;
+  padding: 1rem 0 0;
+}
+
+.scenario-card-equivalent {
+  margin-top: 0.375rem;
+}
+
+.scenario-card-equivalent::before {
+  color: var(--color-leaf);
+  content: "\2248  "; /* ≈ */
 }
 
 .methodology-figure {
@@ -80,28 +168,49 @@ body {
   position: relative;
 }
 
+/* Energy and Carbon figures stack: bold central number, band beneath */
+.scenario-card-energy > .methodology-figure,
+.scenario-card-carbon > .methodology-figure {
+  display: block;
+}
+
 .methodology-trigger {
   background: none;
   border: 0;
+  border-radius: 0.25rem;
   color: inherit;
   cursor: help;
   font: inherit;
   padding: 0;
   text-align: inherit;
+  text-decoration-color: var(--color-card-edge);
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.2em;
+}
+
+.methodology-trigger:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
 }
 
 .methodology-note {
-  background: var(--color-text);
-  border-radius: 0.5rem;
-  color: var(--color-bg);
+  background: var(--color-note-bg);
+  border-radius: 0.625rem;
+  box-shadow: 0 10px 24px -8px var(--shadow-tint-note);
+  color: var(--color-note-text);
   display: block;
+  font-family: var(--font-body);
   font-size: 0.75rem;
   font-weight: 400;
   left: 0;
-  max-width: 18rem;
-  padding: 0.75rem;
+  letter-spacing: 0;
+  line-height: 1.5;
+  max-width: min(18rem, 78vw);
+  padding: 0.75rem 0.875rem;
   position: absolute;
-  top: 100%;
+  text-align: left;
+  top: calc(100% + 0.375rem);
   width: max-content;
   z-index: 1;
 }
@@ -118,25 +227,35 @@ body {
 .methodology-note-source {
   color: inherit;
   display: block;
+  margin-top: 0.125rem;
 }
 
 .boundary-explainer {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .boundary-explainer-trigger {
   background: none;
   border: 0;
-  color: var(--color-muted);
+  border-radius: 0.25rem;
+  color: var(--color-leaf-deep);
   cursor: pointer;
-  font: inherit;
-  font-size: 0.875rem;
+  font-family: var(--font-body);
+  font-size: 0.9375rem; /* stylelint-disable-line number-max-precision -- 15px on the rem scale */
+  font-weight: 500;
   padding: 0;
   text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 0.2em;
+}
+
+.boundary-explainer-trigger:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
 }
 
 .boundary-explainer-panel {
-  border-left: 3px solid var(--color-muted);
+  border-left: 3px solid var(--color-leaf);
   color: var(--color-muted);
   font-size: 0.875rem;
   margin-top: 0.75rem;
@@ -144,5 +263,23 @@ body {
 }
 
 .boundary-explainer-panel a {
-  color: inherit;
+  color: var(--color-leaf-deep);
+}
+
+@media (width >= 40rem) {
+  .app {
+    padding-top: 4rem;
+  }
+
+  .app > h1 {
+    font-size: 3rem;
+  }
+
+  .scenario-card {
+    padding: 2.25rem 2rem;
+  }
+
+  .scenario-card-central {
+    font-size: 3.25rem;
+  }
 }
