@@ -53,4 +53,30 @@ export const scenarios: Scenario[] = [
     modelClass: "frontier",
     outputTokens: 500,
   },
+  {
+    id: "quick-lookup",
+    title: "Quick lookup on a mini model",
+    modelClass: "small",
+    outputTokens: 300,
+  },
+  {
+    id: "summarize-article",
+    title: "Summarize a long article",
+    modelClass: "mid",
+    outputTokens: 800,
+  },
+  {
+    id: "plan-a-trip",
+    title: "Plan a trip",
+    // ~10 back-and-forth turns × ~600 tokens each
+    modelClass: "frontier",
+    outputTokens: 6000,
+  },
+  {
+    id: "agent-coding-afternoon",
+    title: "An afternoon of agent coding",
+    // ~40 agent turns × ~2,000 tokens each
+    modelClass: "frontier",
+    outputTokens: 80000,
+  },
 ];
