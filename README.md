@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-v1 complete — all tickets in [`docs/tasks3.md`](docs/tasks3.md) done: five preset Scenarios across three Model Classes with instant card switching, Energy + Carbon with Uncertainty Bands, Equivalents, Methodology Notes on every figure (hover, keyboard, and touch), the "why our numbers are higher" explainer, and the green nature theme. Live at **https://footprint-jlong.zocomputer.io**.
+In progress — tickets 01–08 of [`docs/tasks.md`](docs/tasks.md) done; tickets 09–12 (Carbon moved off the main page, token slider, Sources page, Advanced mode) planned. Live at **https://footprint-jlong.zocomputer.io**.
 
 ## Development
 
@@ -28,7 +28,7 @@ Pre-commit (husky + lint-staged) runs Prettier + ESLint on staged files, then ty
 
 - **Metrics:** Energy (Wh) as the objective base; Carbon (gCO₂e) derived from it via location-based grid intensity. No water in v1.
 - **Boundary:** full-stack, location-based accounting (EcoLogits methodology, SCI/ISO 21031) — see [ADR 0001](docs/adr/0001-full-stack-location-based-boundary.md). Numbers are deliberately ~5–30× higher than provider-marketing figures.
-- **Input:** preset Scenario cards only — no knobs, no freeform token entry.
+- **Input:** preset Scenario cards plus a token slider (presets set it; visitors may drag it). Model size stays preset-driven.
 - **Display:** bold central number, small min–max range beneath, methodology on hover.
 - **Stack:** React + Vite static site; no backend, no personal data.
 
