@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BoundaryExplainer } from "./components/boundary-explainer";
 import { ScenarioCard } from "./components/scenario-card";
 import { scenarios } from "./footprint/scenarios";
 
@@ -22,6 +23,7 @@ export const App = () => {
         ))}
       </nav>
       <ScenarioCard scenario={selected} />
+      <BoundaryExplainer />
     </main>
   );
 };
