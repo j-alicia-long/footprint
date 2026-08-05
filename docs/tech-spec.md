@@ -162,3 +162,27 @@ syncs it file-by-file to the Zo site `footprint`
 the Zo production server is a plain static server over that folder with SPA
 fallback. This repo is the source of truth. Live:
 https://footprint-jlong.zocomputer.io
+
+## Planned changes (2026-08-05)
+
+Scoped in [tasks 09–12](tasks.md); listed here where they touch the
+computation model.
+
+- **Token slider (ticket 10).** The output-token count of a Scenario Recipe
+  becomes user-visible and adjustable: preset cards set a global slider, and
+  dragging it builds an ad-hoc Scenario (selected Model Class + slider
+  value) fed through the same `computeFootprint` seam. No formula changes;
+  components still do no math. Supersedes the "no knobs, no freeform token
+  entry" constraint from ticket 06.
+- **Carbon display removal (ticket 09).** The main page stops rendering the
+  raw `carbonG` figure. The computation, its golden-value anchor, and its
+  invariants are unchanged — `carbonG` stays in the `Footprint` return and
+  continues to power carbon-based Equivalents. Display-only.
+- **Advanced mode with boundary choice (ticket 12, needs planning).** A
+  toggle would reintroduce raw Carbon plus a measurement-boundary switch
+  (full-stack location-based / GPU-only / market-based). This contradicts
+  [ADR 0001](adr/0001-full-stack-location-based-boundary.md)'s single fixed
+  boundary and is blocked on a future ADR 0003 (expected shape: one
+  _default_ boundary; alternates viewable, clearly labeled, never silently
+  mixed). Requires alternate coefficient math and per-boundary golden-value
+  anchors before any code.
