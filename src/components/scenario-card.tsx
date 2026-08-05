@@ -4,10 +4,13 @@ import { MethodologyFigure } from "./methodology-figure";
 
 const formatWh = (value: number) => `${value.toFixed(1)} Wh`;
 
-/** Thin rendering layer over computeFootprint — no math in components. */
+/**
+ * Thin rendering layer over computeFootprint — no math in components.
+ * Energy is the sole headline figure (ticket 09); Carbon stays in the
+ * Footprint math and surfaces via carbon-based Equivalents.
+ */
 export const ScenarioCard = ({ scenario }: { scenario: Scenario }) => {
-  const { energyWh, carbonG, energyNote, carbonNote, equivalents } =
-    computeFootprint(scenario);
+  const { energyWh, energyNote, equivalents } = computeFootprint(scenario);
   return (
     <article className="scenario-card">
       <h2 className="scenario-card-title">{scenario.title}</h2>
@@ -23,21 +26,6 @@ export const ScenarioCard = ({ scenario }: { scenario: Scenario }) => {
         >
           <span className="scenario-card-band">
             {`${energyWh.min.toFixed(1)} – ${energyWh.max.toFixed(1)} Wh`}
-          </span>
-        </MethodologyFigure>
-      </p>
-      <p className="scenario-card-carbon">
-        <MethodologyFigure figureLabel="central carbon" note={carbonNote}>
-          <strong className="scenario-card-central">
-            {`${carbonG.central.toFixed(1)} gCO₂e`}
-          </strong>
-        </MethodologyFigure>
-        <MethodologyFigure
-          figureLabel="carbon uncertainty band"
-          note={carbonNote}
-        >
-          <span className="scenario-card-band">
-            {`${carbonG.min.toFixed(1)} – ${carbonG.max.toFixed(1)} gCO₂e`}
           </span>
         </MethodologyFigure>
       </p>

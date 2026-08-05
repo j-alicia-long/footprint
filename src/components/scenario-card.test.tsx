@@ -24,18 +24,12 @@ test("card shows the Scenario's bold central Energy (Wh) with min–max Uncertai
   ).toBeInTheDocument();
 });
 
-test("card shows Carbon (gCO₂e) central number with min–max band, alongside Energy", () => {
+test("card shows no raw Carbon figure — Energy is the sole headline number (ticket 09)", () => {
   render(<ScenarioCard scenario={scenario} />);
-  const { carbonG } = computeFootprint(scenario);
-
-  expect(
-    screen.getByText(`${carbonG.central.toFixed(1)} gCO₂e`),
-  ).toBeInTheDocument();
-  expect(
-    screen.getByText(
-      `${carbonG.min.toFixed(1)} – ${carbonG.max.toFixed(1)} gCO₂e`,
-    ),
-  ).toBeInTheDocument();
+  // carbonG stays in the Footprint math; the visitor meets carbon only
+  // through the friendly driving Equivalent, never as a raw gram count.
+  expect(computeFootprint(scenario).carbonG.central).toBeGreaterThan(0);
+  expect(screen.queryByText(/gCO₂e/)).not.toBeInTheDocument();
 });
 
 test("card renders the Scenario's Equivalents (Energy-based TV and Carbon-based driving) from computeFootprint", () => {
@@ -55,12 +49,12 @@ test("card renders the Scenario's Equivalents (Energy-based TV and Carbon-based 
 
 test("invariant: every displayed figure is a Methodology Note trigger (keyboard- and touch-reachable button)", () => {
   render(<ScenarioCard scenario={scenario} />);
-  // Energy central + band, Carbon central + band, and each Equivalent
+  // Energy central + band, and each Equivalent
   const { equivalents } = computeFootprint(scenario);
   const triggers = screen.getAllByRole("button", {
     name: /methodology for/i,
   });
-  expect(triggers).toHaveLength(4 + equivalents.length);
+  expect(triggers).toHaveLength(2 + equivalents.length);
   for (const trigger of triggers) {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   }
@@ -69,20 +63,18 @@ test("invariant: every displayed figure is a Methodology Note trigger (keyboard-
 test("tapping a figure reveals its Methodology Note with boundary statement and citation, from the same records the math uses", async () => {
   const user = userEvent.setup();
   render(<ScenarioCard scenario={scenario} />);
-  const { carbonNote } = computeFootprint(scenario);
+  const { energyNote } = computeFootprint(scenario);
 
-  const carbonTrigger = screen.getByRole("button", {
-    name: /methodology for central carbon/i,
+  const energyTrigger = screen.getByRole("button", {
+    name: /methodology for central energy/i,
   });
-  await user.click(carbonTrigger);
+  await user.click(energyTrigger);
 
-  expect(carbonTrigger).toHaveAttribute("aria-expanded", "true");
+  expect(energyTrigger).toHaveAttribute("aria-expanded", "true");
   const note = screen.getByRole("note");
   expect(note).toHaveTextContent(/full-stack, location-based/i);
-  // The note lists the same cited sources the carbon math used
-  const gridIntensity = carbonNote.coefficients.find(
-    (c) => c.id === "grid-intensity",
-  );
-  if (!gridIntensity) throw new Error("carbon note missing grid intensity");
-  expect(note).toHaveTextContent(gridIntensity.citation.source);
+  // The note lists the same cited sources the energy math used
+  const pue = energyNote.coefficients.find((c) => c.id === "datacenter-pue");
+  if (!pue) throw new Error("energy note missing datacenter PUE");
+  expect(note).toHaveTextContent(pue.citation.source);
 });

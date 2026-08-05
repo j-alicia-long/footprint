@@ -53,7 +53,7 @@ test("UI smoke: clicking a Scenario card renders that Scenario's computed centra
   // Not the default selection, so its numbers appear only after the click
   const tripScenario = scenarios.find((s) => s.id === "plan-a-trip");
   if (!tripScenario) throw new Error("plan-a-trip Scenario missing");
-  const { energyWh, carbonG } = computeFootprint(tripScenario);
+  const { energyWh } = computeFootprint(tripScenario);
 
   expect(
     screen.queryByText(`${energyWh.central.toFixed(1)} Wh`),
@@ -64,7 +64,6 @@ test("UI smoke: clicking a Scenario card renders that Scenario's computed centra
   expect(
     screen.getByText(`${energyWh.central.toFixed(1)} Wh`),
   ).toBeInTheDocument();
-  expect(
-    screen.getByText(`${carbonG.central.toFixed(1)} gCO₂e`),
-  ).toBeInTheDocument();
+  // No raw Carbon figure anywhere on the main page (ticket 09)
+  expect(screen.queryByText(/gCO₂e/)).not.toBeInTheDocument();
 });

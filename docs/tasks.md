@@ -143,11 +143,11 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Scenario card renders Energy only; no gCO₂e figure anywhere on the main page
-- [ ] `carbonG` remains in the `Footprint` return; all existing carbon tests pass unchanged
-- [ ] Carbon-based Equivalents still render from `computeFootprint` output
+- [x] Scenario card renders Energy only; no gCO₂e figure anywhere on the main page
+- [x] `carbonG` remains in the `Footprint` return; all existing carbon tests pass unchanged
+- [x] Carbon-based Equivalents still render from `computeFootprint` output
 
 ---
 

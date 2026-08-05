@@ -122,8 +122,7 @@ body {
   margin: 0 0 1.25rem;
 }
 
-.scenario-card-energy,
-.scenario-card-carbon {
+.scenario-card-energy {
   margin: 0 0 1.25rem;
 }
 
@@ -168,9 +167,8 @@ body {
   position: relative;
 }
 
-/* Energy and Carbon figures stack: bold central number, band beneath */
-.scenario-card-energy > .methodology-figure,
-.scenario-card-carbon > .methodology-figure {
+/* The Energy figure stacks: bold central number, band beneath */
+.scenario-card-energy > .methodology-figure {
   display: block;
 }
 
