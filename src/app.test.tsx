@@ -1,7 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
 import { App } from "./app";
+import {
+  sliderPositionToTokens,
+  tokensToSliderPosition,
+} from "./components/token-slider";
 import { computeFootprint } from "./footprint/compute-footprint";
 import { scenarios } from "./footprint/scenarios";
 
@@ -66,4 +70,66 @@ test("UI smoke: clicking a Scenario card renders that Scenario's computed centra
   ).toBeInTheDocument();
   // No raw Carbon figure anywhere on the main page (ticket 09)
   expect(screen.queryByText(/gCO₂e/)).not.toBeInTheDocument();
+});
+
+test("clicking a preset card sets the slider and Model Class; Footprint updates immediately", async () => {
+  const user = userEvent.setup();
+  render(<App />);
+
+  const codingScenario = scenarios.find(
+    (s) => s.id === "agent-coding-afternoon",
+  );
+  if (!codingScenario) throw new Error("agent-coding-afternoon missing");
+  await user.click(screen.getByRole("button", { name: codingScenario.title }));
+
+  const slider = screen.getByRole("slider");
+  expect(slider).toHaveValue(
+    String(tokensToSliderPosition(codingScenario.outputTokens)),
+  );
+  expect(
+    screen.getByRole("button", { name: codingScenario.title }),
+  ).toHaveAttribute("aria-pressed", "true");
+
+  const { energyWh } = computeFootprint(codingScenario);
+  expect(
+    screen.getByText(`${energyWh.central.toFixed(1)} Wh`),
+  ).toBeInTheDocument();
+});
+
+test("dragging the slider recomputes the Footprint and detaches from presets", () => {
+  render(<App />);
+
+  const sliderPosition = 700;
+  fireEvent.change(screen.getByRole("slider"), {
+    target: { value: String(sliderPosition) },
+  });
+
+  // Detached: no preset card highlighted
+  for (const scenario of scenarios) {
+    expect(
+      screen.getByRole("button", { name: scenario.title }),
+    ).toHaveAttribute("aria-pressed", "false");
+  }
+
+  // Slider value flows through the computeFootprint seam unchanged
+  const outputTokens = sliderPositionToTokens(sliderPosition);
+  const { energyWh } = computeFootprint({
+    id: "custom",
+    title: "custom",
+    modelClass: scenarios[0].modelClass,
+    outputTokens,
+  });
+  expect(
+    screen.getByText(outputTokens.toLocaleString("en-US")),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByText(`${energyWh.central.toFixed(1)} Wh`),
+  ).toBeInTheDocument();
+});
+
+test("slider label explains 'token' in plain language", () => {
+  render(<App />);
+  expect(screen.getByRole("slider")).toHaveAccessibleName(
+    /word-pieces AI models read and write/i,
+  );
 });

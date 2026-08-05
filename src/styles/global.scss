@@ -103,6 +103,37 @@ body {
   color: var(--color-note-text);
 }
 
+.token-slider {
+  margin-bottom: 1.5rem;
+}
+
+.token-slider-label {
+  color: var(--color-text);
+  display: block;
+  font-size: 0.875rem;
+  margin-bottom: 0.375rem;
+}
+
+.token-slider-value {
+  color: var(--color-leaf-deep);
+}
+
+.token-slider-hint {
+  color: var(--color-muted);
+}
+
+.token-slider-input {
+  accent-color: var(--color-leaf);
+  display: block;
+  margin: 0;
+  width: 100%;
+}
+
+.token-slider-input:focus-visible {
+  outline: 2px solid var(--color-leaf);
+  outline-offset: 2px;
+}
+
 .scenario-card {
   background: var(--color-card-bg);
   border: 1px solid var(--color-card-edge);

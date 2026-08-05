@@ -157,13 +157,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** None — can start immediately (09 recommended first to simplify the card).
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Clicking a preset card sets the slider and Model Class; Footprint updates immediately
-- [ ] Dragging the slider recomputes the Footprint and visually detaches from presets
-- [ ] Slider value flows through `computeFootprint` — no math in components
-- [ ] Slider label explains "token" in plain language
-- [ ] UI smoke test: preset click and slider drag both render expected central numbers
+- [x] Clicking a preset card sets the slider and Model Class; Footprint updates immediately
+- [x] Dragging the slider recomputes the Footprint and visually detaches from presets
+- [x] Slider value flows through `computeFootprint` — no math in components
+- [x] Slider label explains "token" in plain language
+- [x] UI smoke test: preset click and slider drag both render expected central numbers
 
 ---
 
