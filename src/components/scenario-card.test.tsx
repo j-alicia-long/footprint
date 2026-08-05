@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
 import { computeFootprint } from "../footprint/compute-footprint";
 import { scenarios } from "../footprint/scenarios";
@@ -50,4 +51,38 @@ test("card renders the Scenario's Equivalents (Energy-based TV and Carbon-based 
       ),
     ).toBeInTheDocument();
   }
+});
+
+test("invariant: every displayed figure is a Methodology Note trigger (keyboard- and touch-reachable button)", () => {
+  render(<ScenarioCard scenario={scenario} />);
+  // Energy central + band, Carbon central + band, and each Equivalent
+  const { equivalents } = computeFootprint(scenario);
+  const triggers = screen.getAllByRole("button", {
+    name: /methodology for/i,
+  });
+  expect(triggers).toHaveLength(4 + equivalents.length);
+  for (const trigger of triggers) {
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+  }
+});
+
+test("tapping a figure reveals its Methodology Note with boundary statement and citation, from the same records the math uses", async () => {
+  const user = userEvent.setup();
+  render(<ScenarioCard scenario={scenario} />);
+  const { carbonNote } = computeFootprint(scenario);
+
+  const carbonTrigger = screen.getByRole("button", {
+    name: /methodology for central carbon/i,
+  });
+  await user.click(carbonTrigger);
+
+  expect(carbonTrigger).toHaveAttribute("aria-expanded", "true");
+  const note = screen.getByRole("note");
+  expect(note).toHaveTextContent(/full-stack, location-based/i);
+  // The note lists the same cited sources the carbon math used
+  const gridIntensity = carbonNote.coefficients.find(
+    (c) => c.id === "grid-intensity",
+  );
+  if (!gridIntensity) throw new Error("carbon note missing grid intensity");
+  expect(note).toHaveTextContent(gridIntensity.citation.source);
 });

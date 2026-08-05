@@ -74,3 +74,48 @@ body {
   border-color: var(--color-text);
   color: var(--color-bg);
 }
+
+.methodology-figure {
+  display: inline-block;
+  position: relative;
+}
+
+.methodology-trigger {
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: help;
+  font: inherit;
+  padding: 0;
+  text-align: inherit;
+}
+
+.methodology-note {
+  background: var(--color-text);
+  border-radius: 0.5rem;
+  color: var(--color-bg);
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  left: 0;
+  max-width: 18rem;
+  padding: 0.75rem;
+  position: absolute;
+  top: 100%;
+  width: max-content;
+  z-index: 1;
+}
+
+.methodology-note-boundary {
+  display: block;
+}
+
+.methodology-note-sources {
+  display: block;
+  margin-top: 0.5rem;
+}
+
+.methodology-note-source {
+  color: inherit;
+  display: block;
+}

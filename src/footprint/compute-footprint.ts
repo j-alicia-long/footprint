@@ -15,6 +15,13 @@ export type UncertaintyBand = {
   max: number;
 };
 
+export type MethodologyNote = {
+  /** The measurement-boundary statement every figure shares (ADR 0001). */
+  boundary: string;
+  /** The exact Coefficient records the figure's math used. */
+  coefficients: Coefficient[];
+};
+
 export type Equivalent = {
   id: string;
   label: string;
@@ -22,13 +29,20 @@ export type Equivalent = {
   basis: "energy" | "carbon";
   unit: string;
   amount: UncertaintyBand;
+  note: MethodologyNote;
 };
 
 export type Footprint = {
   energyWh: UncertaintyBand;
   carbonG: UncertaintyBand;
+  energyNote: MethodologyNote;
+  carbonNote: MethodologyNote;
   equivalents: Equivalent[];
 };
+
+/** Boundary statement shared by every Methodology Note (ADR 0001). */
+export const BOUNDARY_STATEMENT =
+  "Full-stack, location-based boundary (ADR 0001): GPU + server non-GPU energy × datacenter PUE, carbon via the physical grid mix. Training-phase emissions excluded.";
 
 /**
  * Compute a Scenario's Footprint using the EcoLogits full-stack,
@@ -100,6 +114,29 @@ export const computeFootprint = (
     max: band.max * factor,
   });
 
+  // Methodology Notes: built from the very Coefficient records the math
+  // above used, so a figure and its citation can never drift apart.
+  const note = (usedCoefficients: Coefficient[]): MethodologyNote => ({
+    boundary: BOUNDARY_STATEMENT,
+    coefficients: usedCoefficients,
+  });
+  const energyCoefficients = [
+    c.gpuEnergyAlpha,
+    c.gpuEnergyBeta,
+    c.gpuEnergyGamma,
+    c.latencyAlpha,
+    c.latencyBeta,
+    c.latencyGamma,
+    c.batchSize,
+    c.gpuMemory,
+    c.modelQuantizationBits,
+    c.serverGpuCount,
+    c.serverPower,
+    c.datacenterPue,
+  ];
+  const energyNote = note(energyCoefficients);
+  const carbonNote = note([...energyCoefficients, c.gridIntensity]);
+
   // Equivalents: familiar actions with the same Footprint, each converted
   // via a published Coefficient (ticket 04).
   const minutesPerWh = 60 / c.tvPower.value;
@@ -111,6 +148,7 @@ export const computeFootprint = (
       basis: "energy",
       unit: "min",
       amount: scaleBand(energyWh, minutesPerWh),
+      note: note([...energyNote.coefficients, c.tvPower]),
     },
     {
       id: "car-driving",
@@ -118,8 +156,9 @@ export const computeFootprint = (
       basis: "carbon",
       unit: "m",
       amount: scaleBand(carbonG, metersPerG),
+      note: note([...carbonNote.coefficients, c.carDrivingCarbon]),
     },
   ];
 
-  return { energyWh, carbonG, equivalents };
+  return { energyWh, carbonG, energyNote, carbonNote, equivalents };
 };

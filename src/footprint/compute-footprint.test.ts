@@ -117,6 +117,40 @@ describe("computeFootprint — Equivalents", () => {
   });
 });
 
+describe("computeFootprint — Methodology Notes", () => {
+  test("invariant: every displayed figure carries a Methodology Note with a boundary statement and cited Coefficients", () => {
+    const footprint = computeFootprint(frontier500);
+    const notes = [
+      footprint.energyNote,
+      footprint.carbonNote,
+      ...footprint.equivalents.map((e) => e.note),
+    ];
+
+    for (const note of notes) {
+      expect(note.boundary).toMatch(/full-stack, location-based/i);
+      expect(note.coefficients.length).toBeGreaterThan(0);
+      for (const coefficient of note.coefficients) {
+        expect(coefficient.citation.source, coefficient.id).toBeTruthy();
+        expect(coefficient.citation.url, coefficient.id).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  test("notes reference the same Coefficient records the math uses, so figure and citation cannot drift", () => {
+    const injected = structuredClone(coefficients);
+    const footprint = computeFootprint(frontier500, injected);
+
+    // Object identity with the *injected* set — not the bundled one —
+    // proves the note is built from the records the math actually used.
+    expect(footprint.carbonNote.coefficients).toContain(injected.gridIntensity);
+    const tv = footprint.equivalents.find((e) => e.id === "tv-watching");
+    const driving = footprint.equivalents.find((e) => e.id === "car-driving");
+    expect(tv?.note.coefficients).toContain(injected.tvPower);
+    expect(driving?.note.coefficients).toContain(injected.carDrivingCarbon);
+    expect(footprint.energyNote.coefficients).toContain(injected.datacenterPue);
+  });
+});
+
 describe("Coefficient Set", () => {
   test("every Coefficient record carries a citation with source, year, and link", () => {
     for (const coefficient of Object.values(coefficients)) {
