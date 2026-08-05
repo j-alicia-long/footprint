@@ -16,6 +16,10 @@ export type UncertaintyBand = {
 };
 
 export type MethodologyNote = {
+  /** One plain-language sentence describing what the figure means. */
+  summary: string;
+  /** Link into the Sources page section with the full math and citations. */
+  sourcesHref: string;
   /** The measurement-boundary statement every figure shares (ADR 0001). */
   boundary: string;
   /** The exact Coefficient records the figure's math used. */
@@ -115,8 +119,16 @@ export const computeFootprint = (
   });
 
   // Methodology Notes: built from the very Coefficient records the math
-  // above used, so a figure and its citation can never drift apart.
-  const note = (usedCoefficients: Coefficient[]): MethodologyNote => ({
+  // above used, so a figure and its citation can never drift apart. The
+  // summary is the one plain-language sentence the main page shows; the
+  // long-form methodology lives on the Sources page (ticket 11).
+  const note = (
+    summary: string,
+    sourcesHref: string,
+    usedCoefficients: Coefficient[],
+  ): MethodologyNote => ({
+    summary,
+    sourcesHref,
     boundary: BOUNDARY_STATEMENT,
     coefficients: usedCoefficients,
   });
@@ -134,8 +146,16 @@ export const computeFootprint = (
     c.serverPower,
     c.datacenterPue,
   ];
-  const energyNote = note(energyCoefficients);
-  const carbonNote = note([...energyCoefficients, c.gridIntensity]);
+  const energyNote = note(
+    "Electricity the servers drew to generate this answer, counting the whole machine and datacenter overhead — not just the AI chips.",
+    "/sources#energy-model",
+    energyCoefficients,
+  );
+  const carbonNote = note(
+    "Climate impact of that electricity, based on the world-average power grid where servers actually run.",
+    "/sources#carbon",
+    [...energyCoefficients, c.gridIntensity],
+  );
 
   // Equivalents: familiar actions with the same Footprint, each converted
   // via a published Coefficient (ticket 04).
@@ -148,7 +168,11 @@ export const computeFootprint = (
       basis: "energy",
       unit: "min",
       amount: scaleBand(energyWh, minutesPerWh),
-      note: note([...energyNote.coefficients, c.tvPower]),
+      note: note(
+        "The same electricity as running a typical flat-screen TV for this long.",
+        "/sources#equivalents",
+        [...energyNote.coefficients, c.tvPower],
+      ),
     },
     {
       id: "car-driving",
@@ -156,7 +180,11 @@ export const computeFootprint = (
       basis: "carbon",
       unit: "m",
       amount: scaleBand(carbonG, metersPerG),
-      note: note([...carbonNote.coefficients, c.carDrivingCarbon]),
+      note: note(
+        "The same climate impact as driving an average gasoline car this far.",
+        "/sources#equivalents",
+        [...carbonNote.coefficients, c.carDrivingCarbon],
+      ),
     },
   ];
 

@@ -133,10 +133,6 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 ---
 
-# Planned
-
----
-
 # 09 — Remove Carbon from the main page
 
 **What to build:** The main page shows Energy (Wh) as the sole headline Footprint number; the raw Carbon (gCO₂e) figure no longer renders. Display-only change: `computeFootprint` still returns `carbonG`, all carbon tests stay green, and carbon-based Equivalents ("40 m of driving") keep working — the visitor sees the friendly comparison, not the raw gram count. Carbon returns later inside Advanced mode (ticket 12). Supersedes ticket 03's display criterion; the math criteria stand.
@@ -173,13 +169,17 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** None — can start immediately.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `/sources` page renders grouped, cited constants from the Coefficient Set (data-driven, no hand-duplicated prose for citations)
-- [ ] Boundary explainer ("why our numbers are higher") lives on Sources, not the main page
-- [ ] Main page keeps at most one short plain-language sentence per concept, linking to Sources
-- [ ] All acronyms spelled out at first use in each section
-- [ ] Works on the deployed static site (SPA fallback) and on direct load of `/sources`
+- [x] `/sources` page renders grouped, cited constants from the Coefficient Set (data-driven, no hand-duplicated prose for citations)
+- [x] Boundary explainer ("why our numbers are higher") lives on Sources, not the main page
+- [x] Main page keeps at most one short plain-language sentence per concept, linking to Sources
+- [x] All acronyms spelled out at first use in each section
+- [x] Works on the deployed static site (SPA fallback) and on direct load of `/sources`
+
+---
+
+# Planned
 
 ---
 

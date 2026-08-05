@@ -10,14 +10,14 @@ import { computeFootprint } from "./footprint/compute-footprint";
 import { scenarios } from "./footprint/scenarios";
 
 test("visitor sees the AI Carbon Footprint page", () => {
-  render(<App />);
+  render(<App path="/" />);
   expect(
     screen.getByRole("heading", { name: "AI Carbon Footprint" }),
   ).toBeInTheDocument();
 });
 
 test("visitor picks among the full preset Scenario set", () => {
-  render(<App />);
+  render(<App path="/" />);
   for (const scenario of scenarios) {
     expect(
       screen.getByRole("button", { name: scenario.title }),
@@ -25,34 +25,27 @@ test("visitor picks among the full preset Scenario set", () => {
   }
 });
 
-test("skeptical visitor finds the 'why our numbers are higher' explainer panel", async () => {
-  const user = userEvent.setup();
-  render(<App />);
-
-  const trigger = screen.getByRole("button", {
-    name: /why are these numbers higher/i,
+test("skeptical visitor finds one plain sentence linking to the boundary explainer on Sources", () => {
+  render(<App path="/" />);
+  // The long-form "why our numbers are higher" panel lives on /sources
+  // (ticket 11); the main page keeps a single sentence linking to it.
+  const link = screen.getByRole("link", {
+    name: /see our sources & methodology/i,
   });
-  expect(trigger).toHaveAttribute("aria-expanded", "false");
+  expect(link).toHaveAttribute("href", "/sources#boundary");
+  expect(screen.queryByText(/0\.34 Wh/)).not.toBeInTheDocument();
+});
 
-  await user.click(trigger);
-  expect(trigger).toHaveAttribute("aria-expanded", "true");
-
-  const panel = screen.getByRole("note", { name: /why are these numbers/i });
-  // Names the gap and the deliberate boundary choice, per ADR 0001
-  expect(panel).toHaveTextContent(/5–30×/);
-  expect(panel).toHaveTextContent(/full-stack, location-based/i);
-  expect(panel).toHaveTextContent(/ADR 0001/);
-  // Cites the compared provider figures
-  expect(panel).toHaveTextContent(/0\.34 Wh/);
-  expect(panel).toHaveTextContent(/0\.03 gCO₂e/);
-  // States that training-phase emissions are excluded
-  expect(panel).toHaveTextContent(/training/i);
-  expect(panel).toHaveTextContent(/excluded/i);
+test("direct load of /sources renders the Sources page (SPA fallback route)", () => {
+  render(<App path="/sources" />);
+  expect(
+    screen.getByRole("heading", { name: /sources & methodology/i }),
+  ).toBeInTheDocument();
 });
 
 test("UI smoke: clicking a Scenario card renders that Scenario's computed central numbers", async () => {
   const user = userEvent.setup();
-  render(<App />);
+  render(<App path="/" />);
 
   // Not the default selection, so its numbers appear only after the click
   const tripScenario = scenarios.find((s) => s.id === "plan-a-trip");
@@ -74,7 +67,7 @@ test("UI smoke: clicking a Scenario card renders that Scenario's computed centra
 
 test("clicking a preset card sets the slider and Model Class; Footprint updates immediately", async () => {
   const user = userEvent.setup();
-  render(<App />);
+  render(<App path="/" />);
 
   const codingScenario = scenarios.find(
     (s) => s.id === "agent-coding-afternoon",
@@ -97,9 +90,9 @@ test("clicking a preset card sets the slider and Model Class; Footprint updates 
 });
 
 test("dragging the slider recomputes the Footprint and detaches from presets", () => {
-  render(<App />);
+  render(<App path="/" />);
 
-  const sliderPosition = 700;
+  const sliderPosition = 42;
   fireEvent.change(screen.getByRole("slider"), {
     target: { value: String(sliderPosition) },
   });
@@ -128,7 +121,7 @@ test("dragging the slider recomputes the Footprint and detaches from presets", (
 });
 
 test("slider label explains 'token' in plain language", () => {
-  render(<App />);
+  render(<App path="/" />);
   expect(screen.getByRole("slider")).toHaveAccessibleName(
     /word-pieces AI models read and write/i,
   );

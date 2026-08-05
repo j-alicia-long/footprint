@@ -1,4 +1,7 @@
-const SLIDER_STEPS = 1000;
+// 20 steps per decade: one keyboard arrow-step moves the value ~12%,
+// comfortably past the two-significant-figure rounding below (a finer
+// scale would snap back to the same value and feel stuck).
+const SLIDER_STEPS = 60;
 const MIN_EXPONENT = 2; // 10^2 = 100 tokens
 const MAX_EXPONENT = 5; // 10^5 = 100,000 tokens
 
@@ -49,6 +52,7 @@ export const TokenSlider = ({
       min={0}
       max={SLIDER_STEPS}
       value={tokensToSliderPosition(outputTokens)}
+      aria-valuetext={`${outputTokens.toLocaleString("en-US")} tokens`}
       onChange={(event) =>
         onOutputTokensChange(sliderPositionToTokens(Number(event.target.value)))
       }

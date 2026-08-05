@@ -60,7 +60,7 @@ test("invariant: every displayed figure is a Methodology Note trigger (keyboard-
   }
 });
 
-test("tapping a figure reveals its Methodology Note with boundary statement and citation, from the same records the math uses", async () => {
+test("tapping a figure reveals its plain-language Methodology Note linking to Sources", async () => {
   const user = userEvent.setup();
   render(<ScenarioCard scenario={scenario} />);
   const { energyNote } = computeFootprint(scenario);
@@ -72,9 +72,10 @@ test("tapping a figure reveals its Methodology Note with boundary statement and 
 
   expect(energyTrigger).toHaveAttribute("aria-expanded", "true");
   const note = screen.getByRole("note");
-  expect(note).toHaveTextContent(/full-stack, location-based/i);
-  // The note lists the same cited sources the energy math used
-  const pue = energyNote.coefficients.find((c) => c.id === "datacenter-pue");
-  if (!pue) throw new Error("energy note missing datacenter PUE");
-  expect(note).toHaveTextContent(pue.citation.source);
+  // The note shows the same one-sentence summary computeFootprint built
+  expect(note).toHaveTextContent(energyNote.summary);
+  // Long-form methodology and citations live on the Sources page
+  expect(
+    screen.getByRole("link", { name: /see sources & methodology/i }),
+  ).toHaveAttribute("href", energyNote.sourcesHref);
 });

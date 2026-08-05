@@ -26,7 +26,7 @@ _Avoid_: cost (reserved for ai-cost-tracker's dollar/token meanings), impact (va
 Watt-hours the servers drew to run the Scenario. The objective, location-independent base metric; everything else is a multiplier on it.
 
 **Carbon**:
-Grams of CO₂-equivalent, derived from Energy via grid intensity (location-based, per SCI). The metric that powers most Equivalents.
+Grams of CO₂-equivalent, derived from Energy via grid intensity (location-based, per SCI). The metric that powers most Equivalents. Not shown raw on the main page (returns in Advanced mode); visitors meet it through Equivalents.
 _Avoid_: emissions (unqualified), CO2 (imprecise — it's CO₂e)
 
 **Uncertainty Band**:
@@ -42,5 +42,5 @@ The bundled published constants the page ships with: energy-per-token regression
 _Avoid_: magic numbers, config data
 
 **Methodology Note**:
-The citation and boundary statement behind a number, revealed on hover. Every displayed figure has one.
+The plain-language one-sentence explanation behind a number, revealed on hover/focus/tap, linking to the full citations and boundary statement on the Sources page. Every displayed figure has one.
 _Avoid_: footnote (unqualified), disclaimer

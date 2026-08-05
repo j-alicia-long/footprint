@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-In progress — tickets 01–08 of [`docs/tasks.md`](docs/tasks.md) done; tickets 09–12 (Carbon moved off the main page, token slider, Sources page, Advanced mode) planned. Live at **https://footprint-jlong.zocomputer.io**.
+In progress — tickets 01–11 of [`docs/tasks.md`](docs/tasks.md) done: five preset Scenarios with a global token slider, Energy with Uncertainty Bands (raw Carbon moved off the main page), Equivalents, plain-language Methodology Notes, and a data-driven [Sources page](https://footprint-jlong.zocomputer.io/sources). Ticket 12 (Advanced mode with boundary choice) needs planning. Live at **https://footprint-jlong.zocomputer.io**.
 
 ## Development
 

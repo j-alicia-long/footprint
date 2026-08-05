@@ -45,11 +45,14 @@ computeFootprint(scenario: Scenario, coefficients?: CoefficientSet): Footprint
 - `Footprint` returns `energyWh` and `carbonG`, each an Uncertainty Band
   `{ min, central, max }`, plus `equivalents` — the Scenario translated
   into familiar actions (see Equivalents below) — and a `MethodologyNote`
-  per figure (`energyNote`, `carbonNote`, one per Equivalent): the shared
-  boundary statement plus the exact Coefficient records that figure's math
-  used, so a number and its citation can never drift apart (asserted by
-  object identity at the seam). The UI reveals notes on hover, keyboard
-  focus, and touch tap — never hover-only (ticket 05).
+  per figure (`energyNote`, `carbonNote`, one per Equivalent): a
+  one-sentence plain-language `summary`, a `sourcesHref` link into the
+  Sources page section, the shared boundary statement, and the exact
+  Coefficient records that figure's math used, so a number and its citation
+  can never drift apart (asserted by object identity at the seam). The UI
+  reveals notes on hover, keyboard focus, and touch tap — never hover-only
+  (ticket 05); the long-form methodology and citations render on `/sources`
+  from the same Coefficient Set data (ticket 11).
 - The React UI is a thin rendering layer over this function; components do
   no math (enforced by testing only at the seam).
 
@@ -192,18 +195,25 @@ https://footprint-jlong.zocomputer.io
 ## Planned changes (2026-08-05)
 
 Scoped in [tasks 09–12](tasks.md); listed here where they touch the
-computation model.
+computation model. Tickets 09–11 have since shipped:
 
-- **Token slider (ticket 10).** The output-token count of a Scenario Recipe
-  becomes user-visible and adjustable: preset cards set a global slider, and
-  dragging it builds an ad-hoc Scenario (selected Model Class + slider
-  value) fed through the same `computeFootprint` seam. No formula changes;
-  components still do no math. Supersedes the "no knobs, no freeform token
-  entry" constraint from ticket 06.
-- **Carbon display removal (ticket 09).** The main page stops rendering the
-  raw `carbonG` figure. The computation, its golden-value anchor, and its
-  invariants are unchanged — `carbonG` stays in the `Footprint` return and
-  continues to power carbon-based Equivalents. Display-only.
+- **Token slider (ticket 10, done).** The output-token count of a Scenario
+  Recipe is user-visible and adjustable: preset cards set a global
+  logarithmic slider (~100–100,000 tokens), and dragging it builds an
+  ad-hoc Scenario (selected Model Class + slider value) fed through the
+  same `computeFootprint` seam. No formula changes; components still do no
+  math. Supersedes the "no knobs, no freeform token entry" constraint from
+  ticket 06.
+- **Carbon display removal (ticket 09, done).** The main page no longer
+  renders the raw `carbonG` figure. The computation, its golden-value
+  anchor, and its invariants are unchanged — `carbonG` stays in the
+  `Footprint` return and continues to power carbon-based Equivalents.
+  Display-only.
+- **Sources page (ticket 11, done).** `/sources` renders the deep
+  methodology content from the Coefficient Set data, grouped into sections
+  (boundary, energy model, carbon, hardware, equivalents); the boundary
+  explainer moved there from the main page. Routing is a minimal pathname
+  switch in `app.tsx` (no router); the Zo SPA fallback serves direct loads.
 - **Advanced mode with boundary choice (ticket 12, needs planning).** A
   toggle would reintroduce raw Carbon plus a measurement-boundary switch
   (full-stack location-based / GPU-only / market-based). This contradicts

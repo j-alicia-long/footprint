@@ -2,9 +2,10 @@ import { useState } from "react";
 import type { MethodologyNote } from "../footprint/compute-footprint";
 
 /**
- * A figure wrapped in a toggletip trigger: the Methodology Note behind the
- * number is revealed on hover, keyboard focus/activation, and touch tap —
- * never hover-only (ticket 05, accessibility story #15).
+ * A figure wrapped in a toggletip trigger: a one-sentence plain-language
+ * Methodology Note revealed on hover, keyboard focus/activation, and touch
+ * tap — never hover-only (ticket 05, accessibility story #15). The full
+ * methodology and citations live on the Sources page (ticket 11).
  */
 export const MethodologyFigure = ({
   figureLabel,
@@ -20,13 +21,6 @@ export const MethodologyFigure = ({
   const [hovered, setHovered] = useState(false);
   const [pinned, setPinned] = useState(false);
   const open = hovered || pinned;
-
-  // One citation entry per distinct source
-  const sources = [
-    ...new Map(
-      note.coefficients.map((c) => [c.citation.source, c.citation]),
-    ).values(),
-  ];
 
   return (
     <span
@@ -45,18 +39,10 @@ export const MethodologyFigure = ({
       </button>
       {open && (
         <span role="note" className="methodology-note">
-          <span className="methodology-note-boundary">{note.boundary}</span>
-          <span className="methodology-note-sources">
-            {sources.map((citation) => (
-              <a
-                key={citation.source}
-                href={citation.url}
-                className="methodology-note-source"
-              >
-                {`${citation.source} (${citation.year})`}
-              </a>
-            ))}
-          </span>
+          <span className="methodology-note-summary">{note.summary}</span>
+          <a className="methodology-note-link" href={note.sourcesHref}>
+            See sources &amp; methodology
+          </a>
         </span>
       )}
     </span>

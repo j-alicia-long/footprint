@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { BoundaryExplainer } from "./components/boundary-explainer";
 import { ScenarioCard } from "./components/scenario-card";
+import { SourcesPage } from "./components/sources-page";
 import { TokenSlider } from "./components/token-slider";
 import {
   type ModelClass,
@@ -14,7 +14,20 @@ const modelClassLabels: Record<ModelClass, string> = {
   small: "small/mini model",
 };
 
-export const App = () => {
+/**
+ * Minimal pathname switch (ticket 11) — no router dependency; the static
+ * host's single-page-app fallback serves index.html for /sources, and plain
+ * anchor navigation between the two pages is a normal page load, so the
+ * path never changes within a mounted App.
+ */
+export const App = ({ path }: { path: string }) => {
+  if (path.startsWith("/sources")) {
+    return <SourcesPage />;
+  }
+  return <FootprintPage />;
+};
+
+const FootprintPage = () => {
   // Presets set the slider and Model Class; dragging the slider detaches
   // into a custom state with no card highlighted (ticket 10).
   const [modelClass, setModelClass] = useState<ModelClass>(
@@ -63,7 +76,10 @@ export const App = () => {
         onOutputTokensChange={changeOutputTokens}
       />
       <ScenarioCard scenario={selected} />
-      <BoundaryExplainer />
+      <p className="sources-link-note">
+        Why are these numbers higher than the ones AI companies quote?{" "}
+        <a href="/sources#boundary">See our sources &amp; methodology.</a>
+      </p>
     </main>
   );
 };
