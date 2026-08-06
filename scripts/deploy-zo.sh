@@ -6,6 +6,13 @@
 # folder with SPA fallback, so uploading our built files makes this repo the
 # single source of truth; the Zo scaffold is just the host.
 #
+# NOTE: the Zo scaffold's original "prod" script was `bun run build && …`,
+# which rebuilt the placeholder app over our uploaded dist/ on every space
+# restart (seen 2026-08-06 as the site reverting to "Coming soon"). The
+# remote package.json's build/prod scripts are patched to skip that rebuild
+# — if the site ever reverts to the placeholder again, re-check
+# zo:/home/workspace/footprint/package.json before redeploying.
+#
 # Requires: mcporter (npm i -g mcporter) and a Zo API token.
 #   ZO_TOKEN_FILE  path to token file (default: ~/.config/ai-cost-tracker/zo_token)
 set -euo pipefail
