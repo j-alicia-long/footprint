@@ -156,9 +156,9 @@ At the seam only — no tests of internal helpers:
 
 ## Deployment
 
-Static Vite build, no backend. `scripts/deploy-zo.sh` builds `dist/` and
-syncs it file-by-file to the Zo site `footprint`
-(`zo:/home/workspace/footprint/dist/`) over the Zo MCP API (`write_file`);
-the Zo production server is a plain static server over that folder with SPA
-fallback. This repo is the source of truth. Live:
-https://footprint-jlong.zocomputer.io
+Static Vite build, no backend, hosted on GitHub Pages at
+https://j-alicia-long.github.io/footprint/. Pushes to `main` trigger
+`.github/workflows/deploy.yml`, which runs `npm ci && npm run build` and
+publishes `dist/` via the official Pages actions. `vite.config.ts` sets
+`base: "/footprint/"` to match the Pages subpath (see ADR 0003). This repo
+is the source of truth.
