@@ -1,8 +1,12 @@
-# Tickets — AI Carbon Footprint v1
+# Tickets — AI Carbon Footprint
 
-Source: [#1 — Spec: AI Carbon Footprint v1](https://github.com/j-alicia-long/ai-carbon-footprint/issues/1)
+Source: [#1 — Spec: AI Carbon Footprint v1](https://github.com/j-alicia-long/ai-carbon-footprint/issues/1) (tickets 01–08); tickets 09+ scoped in-session (2026-08-05).
 
 Tickets are tracer-bullet vertical slices in dependency order (blockers first). Work the frontier: any ticket whose blockers are all done can start.
+
+---
+
+# Completed
 
 ---
 
@@ -59,12 +63,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 03 — Carbon derived from Energy.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Card renders at least two Equivalents (one Energy-based, one Carbon-based)
-- [ ] Equivalents come out of `computeFootprint`, not computed in components
-- [ ] Each conversion Coefficient carries its citation
-- [ ] Behavior test at the seam: a given Scenario returns the expected Equivalent values
+- [x] Card renders at least two Equivalents (one Energy-based, one Carbon-based)
+- [x] Equivalents come out of `computeFootprint`, not computed in components
+- [x] Each conversion Coefficient carries its citation
+- [x] Behavior test at the seam: a given Scenario returns the expected Equivalent values
 
 ---
 
@@ -74,12 +78,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 03 — Carbon derived from Energy; 04 — Equivalents on the card.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Every displayed figure reveals a Methodology Note on hover
-- [ ] Notes are reachable via keyboard focus and touch tap (accessibility story #15)
-- [ ] Notes render from the same Coefficient records used by `computeFootprint`
-- [ ] Invariant test: every displayed figure carries a Methodology Note reference
+- [x] Every displayed figure reveals a Methodology Note on hover
+- [x] Notes are reachable via keyboard focus and touch tap (accessibility story #15)
+- [x] Notes render from the same Coefficient records used by `computeFootprint`
+- [x] Invariant test: every displayed figure carries a Methodology Note reference
 
 ---
 
@@ -89,13 +93,13 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 02 — First tracer Scenario.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Scenario cards span light → heavy activities across all three Model Classes
-- [ ] Clicking a card updates the displayed Footprint immediately
-- [ ] Invariant test: smaller Model Classes never exceed larger ones on the same Recipe
-- [ ] UI smoke test: clicking a Scenario card renders that Scenario's computed central numbers
-- [ ] Adding a new Scenario is a data-only change
+- [x] Scenario cards span light → heavy activities across all three Model Classes
+- [x] Clicking a card updates the displayed Footprint immediately
+- [x] Invariant test: smaller Model Classes never exceed larger ones on the same Recipe
+- [x] UI smoke test: clicking a Scenario card renders that Scenario's computed central numbers
+- [x] Adding a new Scenario is a data-only change
 
 ---
 
@@ -105,12 +109,12 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 05 — Methodology Notes on every figure.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Panel explains the full-stack, location-based boundary and names the ~5–30× gap explicitly
-- [ ] References ADR 0001 and cites the compared provider figures
-- [ ] States that training-phase emissions are excluded (as industry-wide per-query figures do)
-- [ ] Reachable by keyboard and touch, consistent with Methodology Note interaction
+- [x] Panel explains the full-stack, location-based boundary and names the ~5–30× gap explicitly
+- [x] References ADR 0001 and cites the compared provider figures
+- [x] States that training-phase emissions are excluded (as industry-wide per-query figures do)
+- [x] Reachable by keyboard and touch, consistent with Methodology Note interaction
 
 ---
 
@@ -120,9 +124,75 @@ Tickets are tracer-bullet vertical slices in dependency order (blockers first). 
 
 **Blocked by:** 05 — Methodology Notes on every figure; 06 — Full Scenario set.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Green nature-themed design applied across the page
-- [ ] Layout readable and fully usable on a phone-sized viewport
-- [ ] Bold central numbers with small Uncertainty Bands beneath, per README design
-- [ ] Stylelint passes; no CSS Modules or Tailwind introduced
+- [x] Green nature-themed design applied across the page
+- [x] Layout readable and fully usable on a phone-sized viewport
+- [x] Bold central numbers with small Uncertainty Bands beneath, per README design
+- [x] Stylelint passes; no CSS Modules or Tailwind introduced
+
+---
+
+# 09 — Remove Carbon from the main page
+
+**What to build:** The main page shows Energy (Wh) as the sole headline Footprint number; the raw Carbon (gCO₂e) figure no longer renders. Display-only change: `computeFootprint` still returns `carbonG`, all carbon tests stay green, and carbon-based Equivalents ("40 m of driving") keep working — the visitor sees the friendly comparison, not the raw gram count. Carbon returns later inside Advanced mode (ticket 12). Supersedes ticket 03's display criterion; the math criteria stand.
+
+**Blocked by:** None — can start immediately.
+
+**Status:** done
+
+- [x] Scenario card renders Energy only; no gCO₂e figure anywhere on the main page
+- [x] `carbonG` remains in the `Footprint` return; all existing carbon tests pass unchanged
+- [x] Carbon-based Equivalents still render from `computeFootprint` output
+
+---
+
+# 10 — Token slider with preset-linked Scenario cards
+
+**What to build:** The main page gains one global slider for output-token count. Clicking a preset Scenario card sets the slider to that card's token count and selects its Model Class; dragging the slider detaches into a "custom" state (no card highlighted). The slider feeds the existing `computeFootprint` seam via an ad-hoc Scenario built from the selected Model Class + slider value — no math in components. Logarithmic scale spanning ~100 to ~100,000 tokens. Because "token" is jargon, the label spells it out in plain language ("tokens — the word-pieces AI models read and write"). Supersedes ticket 06's "no knobs, no freeform token entry" constraint; CONTEXT.md's Scenario Recipe definition updated to match (token count now visible and adjustable; Model Class remains preset-driven).
+
+**Blocked by:** None — can start immediately (09 recommended first to simplify the card).
+
+**Status:** done
+
+- [x] Clicking a preset card sets the slider and Model Class; Footprint updates immediately
+- [x] Dragging the slider recomputes the Footprint and visually detaches from presets
+- [x] Slider value flows through `computeFootprint` — no math in components
+- [x] Slider label explains "token" in plain language
+- [x] UI smoke test: preset click and slider drag both render expected central numbers
+
+---
+
+# 11 — Sources page with cited research and plain-language rewrite
+
+**What to build:** A separate `/sources` page holding the deep methodology content, rendered from the Coefficient Set data (every constant already carries `{ description, value, unit, citation }`), grouped into readable sections: energy model, carbon, hardware, equivalents. The boundary explainer (ticket 07) and long-form methodology content (ticket 05) migrate here; the main page keeps one-sentence plain-language notes linking to the relevant Sources section. Routing via a minimal hash/pathname switch in `app.tsx` — no router dependency; the Zo deployment's SPA fallback already serves it. Writing conventions: every acronym spelled out at first use per section — e.g. Power Usage Effectiveness (PUE), Mixture of Experts (MoE) — and every explanation written for a reader with no ML or energy background, everyday meaning first, technical term second.
+
+**Blocked by:** None — can start immediately.
+
+**Status:** done
+
+- [x] `/sources` page renders grouped, cited constants from the Coefficient Set (data-driven, no hand-duplicated prose for citations)
+- [x] Boundary explainer ("why our numbers are higher") lives on Sources, not the main page
+- [x] Main page keeps at most one short plain-language sentence per concept, linking to Sources
+- [x] All acronyms spelled out at first use in each section
+- [x] Works on the deployed static site (SPA fallback) and on direct load of `/sources`
+
+---
+
+# Planned
+
+---
+
+# 12 — Advanced mode with boundary choice
+
+**What to build:** An "Advanced" toggle revealing expert-level detail: the raw Carbon (gCO₂e) number (removed from the default view in ticket 09), fuller Uncertainty Band detail, and a measurement-boundary choice (full-stack location-based — the default — vs. GPU-only vs. market-based carbon). Boundary choice contradicts ADR 0001, which fixed a single boundary because the choice alone swings published figures ~95×; this ticket therefore requires **ADR 0003** first, likely amending 0001 to "one default boundary; alternates viewable but clearly labeled, never silently mixed." Needs alternate coefficient math per boundary and per-boundary golden-value anchors.
+
+**Blocked by:** 09 — Remove Carbon (Carbon's new home is here); ADR 0003 — boundary-choice decision (not yet written; needs scoping discussion).
+
+**Status:** needs-planning
+
+- [ ] ADR 0003 written and accepted before any boundary-switching code
+- [ ] Advanced toggle reveals raw Carbon and Uncertainty Band detail
+- [ ] Boundary switch relabels every affected figure; boundaries never silently mixed
+- [ ] Golden-value anchors per boundary (e.g. GPU-only frontier ≈ Epoch AI's ~0.3 Wh)
+- [ ] Default view (Advanced off) is byte-identical to pre-toggle behavior

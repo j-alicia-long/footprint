@@ -6,7 +6,7 @@ Pick a preset Scenario card — _ask ChatGPT a question_, _an afternoon of agent
 
 ## Status
 
-In progress — tickets 01–03 of [`docs/tasks3.md`](docs/tasks3.md) done: one card shows Energy (Wh) and Carbon (gCO₂e), each with its Uncertainty Band, computed by `computeFootprint` from a cited Coefficient Set. Live at **https://j-alicia-long.github.io/footprint/**.
+In progress — tickets 01–11 of [`docs/tasks.md`](docs/tasks.md) done: five preset Scenarios with a global token slider, Energy with Uncertainty Bands (raw Carbon moved off the main page), Equivalents, plain-language Methodology Notes, and a data-driven [Sources page](https://j-alicia-long.github.io/footprint/sources). Ticket 12 (Advanced mode with boundary choice) needs planning. Live at **https://j-alicia-long.github.io/footprint/**.
 
 ## Development
 
@@ -33,7 +33,7 @@ Pre-commit (husky + lint-staged) runs Prettier + ESLint on staged files, then ty
 
 - **Metrics:** Energy (Wh) as the objective base; Carbon (gCO₂e) derived from it via location-based grid intensity. No water in v1.
 - **Boundary:** full-stack, location-based accounting (EcoLogits methodology, SCI/ISO 21031) — see [ADR 0001](docs/adr/0001-full-stack-location-based-boundary.md). Numbers are deliberately ~5–30× higher than provider-marketing figures.
-- **Input:** preset Scenario cards only — no knobs, no freeform token entry.
+- **Input:** preset Scenario cards plus a token slider (presets set it; visitors may drag it). Model size stays preset-driven.
 - **Display:** bold central number, small min–max range beneath, methodology on hover.
 - **Stack:** React + Vite static site; no backend, no personal data.
 

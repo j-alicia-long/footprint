@@ -74,6 +74,83 @@ describe("computeFootprint — Carbon", () => {
   });
 });
 
+describe("computeFootprint — Equivalents", () => {
+  test("behavior: returns an Energy-based TV Equivalent (100 W TV runs 0.6 min per Wh)", () => {
+    const { energyWh, equivalents } = computeFootprint(frontier500);
+    const tv = equivalents.find((e) => e.id === "tv-watching");
+
+    expect(tv).toBeDefined();
+    expect(tv?.basis).toBe("energy");
+    expect(tv?.unit).toBe("min");
+    // Worked example: a 100 W TV draws 1 Wh in 60/100 = 0.6 minutes,
+    // so minutes of TV = Wh × 0.6 at every band point.
+    expect(tv?.amount.central).toBeCloseTo(energyWh.central * 0.6, 10);
+    expect(tv?.amount.min).toBeCloseTo(energyWh.min * 0.6, 10);
+    expect(tv?.amount.max).toBeCloseTo(energyWh.max * 0.6, 10);
+  });
+
+  test("behavior: returns a Carbon-based driving Equivalent (EPA 400 gCO₂e/mile → 4.02336 m per gCO₂e)", () => {
+    const { carbonG, equivalents } = computeFootprint(frontier500);
+    const driving = equivalents.find((e) => e.id === "car-driving");
+
+    expect(driving).toBeDefined();
+    expect(driving?.basis).toBe("carbon");
+    expect(driving?.unit).toBe("m");
+    // Worked example: 400 gCO₂e per mile (1,609.344 m) means
+    // 1 gCO₂e ≡ 1609.344 / 400 = 4.02336 m of driving.
+    expect(driving?.amount.central).toBeCloseTo(carbonG.central * 4.02336, 10);
+    expect(driving?.amount.min).toBeCloseTo(carbonG.min * 4.02336, 10);
+    expect(driving?.amount.max).toBeCloseTo(carbonG.max * 4.02336, 10);
+  });
+
+  test("invariant: every Equivalent's band brackets its central value", () => {
+    const { equivalents } = computeFootprint(frontier500);
+    expect(equivalents.length).toBeGreaterThanOrEqual(2);
+    for (const equivalent of equivalents) {
+      expect(equivalent.amount.min, equivalent.id).toBeLessThanOrEqual(
+        equivalent.amount.central,
+      );
+      expect(equivalent.amount.central, equivalent.id).toBeLessThanOrEqual(
+        equivalent.amount.max,
+      );
+    }
+  });
+});
+
+describe("computeFootprint — Methodology Notes", () => {
+  test("invariant: every displayed figure carries a Methodology Note with a boundary statement and cited Coefficients", () => {
+    const footprint = computeFootprint(frontier500);
+    const notes = [
+      footprint.energyNote,
+      footprint.carbonNote,
+      ...footprint.equivalents.map((e) => e.note),
+    ];
+
+    for (const note of notes) {
+      expect(note.boundary).toMatch(/full-stack, location-based/i);
+      expect(note.coefficients.length).toBeGreaterThan(0);
+      for (const coefficient of note.coefficients) {
+        expect(coefficient.citation.source, coefficient.id).toBeTruthy();
+        expect(coefficient.citation.url, coefficient.id).toMatch(/^https:\/\//);
+      }
+    }
+  });
+
+  test("notes reference the same Coefficient records the math uses, so figure and citation cannot drift", () => {
+    const injected = structuredClone(coefficients);
+    const footprint = computeFootprint(frontier500, injected);
+
+    // Object identity with the *injected* set — not the bundled one —
+    // proves the note is built from the records the math actually used.
+    expect(footprint.carbonNote.coefficients).toContain(injected.gridIntensity);
+    const tv = footprint.equivalents.find((e) => e.id === "tv-watching");
+    const driving = footprint.equivalents.find((e) => e.id === "car-driving");
+    expect(tv?.note.coefficients).toContain(injected.tvPower);
+    expect(driving?.note.coefficients).toContain(injected.carDrivingCarbon);
+    expect(footprint.energyNote.coefficients).toContain(injected.datacenterPue);
+  });
+});
+
 describe("Coefficient Set", () => {
   test("every Coefficient record carries a citation with source, year, and link", () => {
     for (const coefficient of Object.values(coefficients)) {

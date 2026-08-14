@@ -4,12 +4,14 @@ A public, nature-themed page where a visitor picks a preset everyday AI scenario
 
 ## Language
 
+Visitor-facing copy is written for a reader with no ML or energy background: everyday meaning first, technical term second, and every acronym spelled out at first use in a section — e.g. Power Usage Effectiveness (PUE).
+
 **Scenario**:
 A preset card describing a familiar AI activity ("ask ChatGPT a question", "an afternoon of agent coding", "plan a trip"). Hypothetical, not measured.
 _Avoid_: session (reserved for a real recorded run in the companion ai-cost-tracker project), action, task, query
 
 **Scenario Recipe**:
-The hidden token math behind a Scenario: a Model Class plus an output-token count (e.g. 40 turns × 2,000 tokens). Visitors never see or edit it.
+The token math behind a Scenario: a Model Class plus an output-token count (e.g. 40 turns × 2,000 tokens). The token count is visible and adjustable via the main-page slider (presets set it, visitors may drag it); the Model Class stays preset-driven.
 _Avoid_: parameters, config
 
 **Model Class**:
@@ -24,7 +26,7 @@ _Avoid_: cost (reserved for ai-cost-tracker's dollar/token meanings), impact (va
 Watt-hours the servers drew to run the Scenario. The objective, location-independent base metric; everything else is a multiplier on it.
 
 **Carbon**:
-Grams of CO₂-equivalent, derived from Energy via grid intensity (location-based, per SCI). The metric that powers most Equivalents.
+Grams of CO₂-equivalent, derived from Energy via grid intensity (location-based, per SCI). The metric that powers most Equivalents. Not shown raw on the main page (returns in Advanced mode); visitors meet it through Equivalents.
 _Avoid_: emissions (unqualified), CO2 (imprecise — it's CO₂e)
 
 **Uncertainty Band**:
@@ -40,5 +42,5 @@ The bundled published constants the page ships with: energy-per-token regression
 _Avoid_: magic numbers, config data
 
 **Methodology Note**:
-The citation and boundary statement behind a number, revealed on hover. Every displayed figure has one.
+The plain-language one-sentence explanation behind a number, revealed on hover/focus/tap, linking to the full citations and boundary statement on the Sources page. Every displayed figure has one.
 _Avoid_: footnote (unqualified), disclaimer

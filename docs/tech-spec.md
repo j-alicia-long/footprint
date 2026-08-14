@@ -43,7 +43,16 @@ computeFootprint(scenario: Scenario, coefficients?: CoefficientSet): Footprint
   carbon linearity in grid intensity) can be tested at the seam without
   reaching into internals.
 - `Footprint` returns `energyWh` and `carbonG`, each an Uncertainty Band
-  `{ min, central, max }`.
+  `{ min, central, max }`, plus `equivalents` — the Scenario translated
+  into familiar actions (see Equivalents below) — and a `MethodologyNote`
+  per figure (`energyNote`, `carbonNote`, one per Equivalent): a
+  one-sentence plain-language `summary`, a `sourcesHref` link into the
+  Sources page section, the shared boundary statement, and the exact
+  Coefficient records that figure's math used, so a number and its citation
+  can never drift apart (asserted by object identity at the seam). The UI
+  reveals notes on hover, keyboard focus, and touch tap — never hover-only
+  (ticket 05); the long-form methodology and citations render on `/sources`
+  from the same Coefficient Set data (ticket 11).
 - The React UI is a thin rendering layer over this function; components do
   no math (enforced by testing only at the seam).
 
@@ -115,6 +124,22 @@ Embodied-hardware constants (H100: 273 kgCO₂e; 8-GPU server: 5,700 kgCO₂e,
 **not yet folded into carbonG** — at realistic latencies they add well under
 1 g per request and no ticket has required them yet.
 
+## Equivalents
+
+`computeFootprint` also returns `equivalents`: familiar actions with the
+same Footprint, so the UI stays a thin rendering layer (ticket 04). Each
+Equivalent is `{ id, label, basis, unit, amount }`, where `basis` names the
+Footprint metric it converts from and `amount` is an Uncertainty Band
+scaled from that metric's band by a published conversion Coefficient:
+
+| Equivalent    | Basis  | Conversion                                                                | Coefficient (citation)                                  |
+| ------------- | ------ | ------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `tv-watching` | Energy | `min of TV = Wh × 60 / tvPower` (100 W → 0.6 min/Wh)                      | `tvPower` (U.S. DOE appliance energy)                   |
+| `car-driving` | Carbon | `m driven = gCO₂e × 1609.344 / carDrivingCarbon` (400 g/mile → ~4.02 m/g) | `carDrivingCarbon` (U.S. EPA typical passenger vehicle) |
+
+The meters-per-mile factor is an exact definitional unit conversion and
+lives in code, not the Coefficient Set.
+
 ## Coefficient Set
 
 Every constant lives in `src/footprint/coefficients.ts` as a record
@@ -152,7 +177,11 @@ At the seam only — no tests of internal helpers:
 - Energy scales monotonically with output tokens
 - Carbon scales linearly with grid intensity (via injected Coefficient
   Set); Energy is unaffected by grid intensity
+- Every Equivalent's band brackets its central value
 - Every Coefficient and Model Class carries a citation
+- Every displayed figure carries a Methodology Note built from the same
+  Coefficient records the math used
+- Smaller Model Classes never exceed larger ones on the same Recipe
 
 ## Deployment
 
@@ -160,5 +189,38 @@ Static Vite build, no backend, hosted on GitHub Pages at
 https://j-alicia-long.github.io/footprint/. Pushes to `main` trigger
 `.github/workflows/deploy.yml`, which runs `npm ci && npm run build` and
 publishes `dist/` via the official Pages actions. `vite.config.ts` sets
-`base: "/footprint/"` to match the Pages subpath (see ADR 0003). This repo
-is the source of truth.
+`base: "/footprint/"` to match the Pages subpath (see ADR 0003). The
+workflow copies `index.html` to `404.html` so direct loads of `/sources`
+work (GitHub Pages has no SPA fallback). This repo is the source of truth.
+
+## Planned changes (2026-08-05)
+
+Scoped in [tasks 09–12](tasks.md); listed here where they touch the
+computation model. Tickets 09–11 have since shipped:
+
+- **Token slider (ticket 10, done).** The output-token count of a Scenario
+  Recipe is user-visible and adjustable: preset cards set a global
+  logarithmic slider (~100–100,000 tokens), and dragging it builds an
+  ad-hoc Scenario (selected Model Class + slider value) fed through the
+  same `computeFootprint` seam. No formula changes; components still do no
+  math. Supersedes the "no knobs, no freeform token entry" constraint from
+  ticket 06.
+- **Carbon display removal (ticket 09, done).** The main page no longer
+  renders the raw `carbonG` figure. The computation, its golden-value
+  anchor, and its invariants are unchanged — `carbonG` stays in the
+  `Footprint` return and continues to power carbon-based Equivalents.
+  Display-only.
+- **Sources page (ticket 11, done).** `/sources` renders the deep
+  methodology content from the Coefficient Set data, grouped into sections
+  (boundary, energy model, carbon, hardware, equivalents); the boundary
+  explainer moved there from the main page. Routing is a minimal pathname
+  switch in `app.tsx` (no router); on GitHub Pages a `404.html` copy of
+  `index.html` serves direct loads.
+- **Advanced mode with boundary choice (ticket 12, needs planning).** A
+  toggle would reintroduce raw Carbon plus a measurement-boundary switch
+  (full-stack location-based / GPU-only / market-based). This contradicts
+  [ADR 0001](adr/0001-full-stack-location-based-boundary.md)'s single fixed
+  boundary and is blocked on a future ADR (expected shape: one
+  _default_ boundary; alternates viewable, clearly labeled, never silently
+  mixed). Requires alternate coefficient math and per-boundary golden-value
+  anchors before any code.

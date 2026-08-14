@@ -163,4 +163,30 @@ export const coefficients = {
     unit: "s",
     citation: ecologitsCitation,
   },
+  tvPower: {
+    id: "tv-power",
+    description:
+      "Typical power draw of a modern flat-screen TV, used for the Energy-based TV-watching Equivalent",
+    value: 100,
+    unit: "W",
+    citation: {
+      source:
+        "U.S. Department of Energy, Estimating Appliance and Home Electronic Energy Use (flat-screen TV range 60\u2013150 W)",
+      year: 2023,
+      url: "https://www.energy.gov/energysaver/estimating-appliance-and-home-electronic-energy-use",
+    },
+  },
+  carDrivingCarbon: {
+    id: "car-driving-carbon",
+    description:
+      "Tailpipe carbon of an average U.S. passenger vehicle per mile driven, used for the Carbon-based driving Equivalent",
+    value: 400,
+    unit: "gCO2e/mile",
+    citation: {
+      source:
+        "U.S. EPA, Greenhouse Gas Emissions from a Typical Passenger Vehicle",
+      year: 2023,
+      url: "https://www.epa.gov/greenvehicles/greenhouse-gas-emissions-typical-passenger-vehicle",
+    },
+  },
 } as const satisfies Record<string, Coefficient>;
