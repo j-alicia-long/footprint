@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
 import { App } from "./app";
+import { withBase } from "./base-path";
 import {
   sliderPositionToTokens,
   tokensToSliderPosition,
@@ -32,7 +33,7 @@ test("skeptical visitor finds one plain sentence linking to the boundary explain
   const link = screen.getByRole("link", {
     name: /see our sources & methodology/i,
   });
-  expect(link).toHaveAttribute("href", "/sources#boundary");
+  expect(link).toHaveAttribute("href", withBase("/sources#boundary"));
   expect(screen.queryByText(/0\.34 Wh/)).not.toBeInTheDocument();
 });
 

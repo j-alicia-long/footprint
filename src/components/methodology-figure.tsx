@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { withBase } from "../base-path";
 import type { MethodologyNote } from "../footprint/compute-footprint";
 
 /**
@@ -40,7 +41,10 @@ export const MethodologyFigure = ({
       {open && (
         <span role="note" className="methodology-note">
           <span className="methodology-note-summary">{note.summary}</span>
-          <a className="methodology-note-link" href={note.sourcesHref}>
+          <a
+            className="methodology-note-link"
+            href={withBase(note.sourcesHref)}
+          >
             See sources &amp; methodology
           </a>
         </span>

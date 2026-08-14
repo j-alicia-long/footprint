@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { expect, test } from "vitest";
+import { withBase } from "../base-path";
 import { computeFootprint } from "../footprint/compute-footprint";
 import { scenarios } from "../footprint/scenarios";
 import { ScenarioCard } from "./scenario-card";
@@ -77,5 +78,5 @@ test("tapping a figure reveals its plain-language Methodology Note linking to So
   // Long-form methodology and citations live on the Sources page
   expect(
     screen.getByRole("link", { name: /see sources & methodology/i }),
-  ).toHaveAttribute("href", energyNote.sourcesHref);
+  ).toHaveAttribute("href", withBase(energyNote.sourcesHref));
 });

@@ -1,3 +1,4 @@
+import { withBase } from "../base-path";
 import { type Coefficient, coefficients as c } from "../footprint/coefficients";
 import { modelClasses } from "../footprint/scenarios";
 
@@ -83,7 +84,7 @@ const modelClassProxy = Object.values(modelClasses)[0].citation;
 
 export const SourcesPage = () => (
   <main className="app sources">
-    <a className="sources-back" href="/">
+    <a className="sources-back" href={withBase("/")}>
       ← Back to the footprint page
     </a>
     <h1>Sources &amp; methodology</h1>

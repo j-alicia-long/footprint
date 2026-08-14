@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { withBase } from "./base-path";
 import { ScenarioCard } from "./components/scenario-card";
 import { SourcesPage } from "./components/sources-page";
 import { TokenSlider } from "./components/token-slider";
@@ -78,7 +79,9 @@ const FootprintPage = () => {
       <ScenarioCard scenario={selected} />
       <p className="sources-link-note">
         Why are these numbers higher than the ones AI companies quote?{" "}
-        <a href="/sources#boundary">See our sources &amp; methodology.</a>
+        <a href={withBase("/sources#boundary")}>
+          See our sources &amp; methodology.
+        </a>
       </p>
     </main>
   );
